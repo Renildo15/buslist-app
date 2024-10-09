@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import * as SecureStore from "expo-secure-store";
 import { IUser } from "@/api/interfaces/user";
+import { login } from "@/api/api";
 
 interface IAuthContextProps {
     userToken: string | null;
@@ -34,9 +35,13 @@ export const AuthProvider = (props: IAuthProviderProps) => {
     }
 
     const authenticateUser = async (username: string, password: string) => {
-        // Call the API to authenticate the user
-        // If successful, set the userToken and save it to SecureStore
-        // If unsuccessful, throw an error
+       const data = await login(username, password);
+
+       setUserToken(data.access);
+       setUserInfo(data.user);
+
+       await SecureStore.setItemAsync("userToken", data.access);
+       await SecureStore.setItemAsync("refreshToken", data.refresh);
     }
 
 
