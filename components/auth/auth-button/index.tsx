@@ -4,7 +4,6 @@ import { Text } from '@/components/Themed';
 
 interface AuthButtonProps extends TouchableOpacityProps {
     label: string;
-    onPress?: () => void;
 }
 
 export default function AuthButton(props: AuthButtonProps) {
@@ -12,7 +11,7 @@ export default function AuthButton(props: AuthButtonProps) {
         <TouchableOpacity
           style={styles.button}
           activeOpacity={0.8}
-          onPress={props.onPress}
+          {...props}
         >
           <Text
             style={styles.buttonLabel}

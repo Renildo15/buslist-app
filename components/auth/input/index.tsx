@@ -11,19 +11,19 @@ interface IInputProps extends TextInputProps {
 }
 
 export default function Input(props: IInputProps) {
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   return (
    <View style={styles.container}>
     <TextInput
       style={styles.input}
+      { ...props}
       secureTextEntry={props.secureTextEntry && !isPasswordVisible}
-     { ...props}
       
     />
     {props.secureTextEntry && (
         <TouchableOpacity
-        style={styles.icon}
-        onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+          style={styles.icon}
+          onPress={() => setIsPasswordVisible(!isPasswordVisible)}
         >
             <Feather name={isPasswordVisible ? "eye-off" : "eye"} size={24} />
         </TouchableOpacity>

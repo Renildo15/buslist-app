@@ -1,3 +1,4 @@
+import React, { useContext, useState } from "react";
 import { createContext } from "react";
 import * as SecureStore from "expo-secure-store";
 import { IUser } from "@/api/interfaces/user";
@@ -9,45 +10,54 @@ interface IAuthContextProps {
     authenticateUser: (username: string, password: string) => Promise<void>;
     setUserInfo:(user: IUser | null) => void;
     user: IUser | null;
+    isLoading: boolean;
 }
 
-export const AuthContext = createContext<IAuthContextProps>({
-    userToken: null,
-    logout: () => {},
-    authenticateUser: async () => {},
-    setUserInfo: () => {},
-    user: null,
-})
+const AuthContext = createContext<IAuthContextProps | null>(null);
 
-interface IAuthProviderProps {
-    children: React.ReactNode;
-    userTokenState: [string | null, React.Dispatch<React.SetStateAction<string | null>>];
-    userInfoState: [IUser | null, React.Dispatch<React.SetStateAction<IUser | null>>];
+export function useSession() {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error("useSession must be used within a AuthProvider");
+    }
+    return context;
 }
 
-export const AuthProvider = (props: IAuthProviderProps) => {
-    const [userToken, setUserToken] = props.userTokenState;
-    const [userInfo, setUserInfo] = props.userInfoState;
+export function SessionProvider(props: React.PropsWithChildren) {
+    const [isLoading, setIsLoading] = useState(false);
+    const [userToken, setUserToken] = useState<string | null>(null);
+    const [userInfo, setUserInfo] = useState<IUser | null>(null);
 
     const logout = async () => {
-        setUserToken(null);
         await SecureStore.deleteItemAsync("userToken");
-    }
+        setUserToken(null);
+    };
 
     const authenticateUser = async (username: string, password: string) => {
-       const data = await login(username, password);
+        try {
+            setIsLoading(true);
+            const data = await login(username, password);
+ 
+            setUserToken(data.access);
+            setUserInfo(data.user);
 
-       setUserToken(data.access);
-       setUserInfo(data.user);
-
-       await SecureStore.setItemAsync("userToken", data.access);
-       await SecureStore.setItemAsync("refreshToken", data.refresh);
-    }
-
+            await SecureStore.setItemAsync("userToken", data.access);
+            await SecureStore.setItemAsync("refreshToken", data.refresh);
+        } catch (error) {
+            console.error(`Error: ${error}`);
+            setUserInfo(null);
+            setUserToken(null);
+            setIsLoading(false);
+        } finally {
+            setIsLoading(false);
+        }
+     }
 
     return (
-        <AuthContext.Provider value={{ userToken, logout, authenticateUser, setUserInfo, user: userInfo }}>
+        <AuthContext.Provider value={{ userToken, logout, authenticateUser, setUserInfo, user: userInfo, isLoading: isLoading }}>
             {props.children}
         </AuthContext.Provider>
-    )
+    );
+        
 }
+

@@ -19,7 +19,7 @@ export default function Matric() {
                     style={styles.imageContainer}
                 >
                     <Image
-                        source={require('../../assets/images/logo.png')}
+                        source={require('../../../assets/images/logo.png')}
                         style={styles.image}
                     />
                 </View>

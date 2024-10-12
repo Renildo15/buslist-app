@@ -1,50 +1,69 @@
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
-import React, { useState } from 'react';
+import { StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import React, { useState, useContext } from 'react';
 import { Text, View } from '@/components/Themed';
 import Input from '@/components/auth/input';
 import ImagePattern from '@/components/auth/image-pattern';
 import { Link } from 'expo-router';
 import AuthButton from '@/components/auth/auth-button';
+import { StatusBar } from 'expo-status-bar';
+import { useSession } from '@/context/AuthContext';
 
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  const {authenticateUser, isLoading} = useSession();
+
+  const handleLogin = async () => {
+    try {
+      await authenticateUser(username, password);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
-    <ImagePattern>
-      <View style={styles.container}>
-        <View
-          style={styles.imageContainer}
-        >
-          <Image
-            source={require('../../assets/images/logo.png')}
-            style={styles.image}
+    <>
+    <StatusBar backgroundColor='#007bff'/>
+      <ImagePattern>
+        <View style={styles.container}>
+          <View
+            style={styles.imageContainer}
+          >
+            <Image
+              source={require('../../assets/images/logo.png')}
+              style={styles.image}
+            />
+          </View>
+          <Input
+            placeholder="Usuário"
+            value={username}
+            onChangeText={setUsername}
           />
+          <Input
+            placeholder="Senha"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <AuthButton 
+            label="Entrar"
+            onPress={handleLogin}
+            disabled={isLoading}
+          />
+          <Text style={styles.textRegister}>
+            Não tem uma conta?
+          </Text>
+          <TouchableOpacity>
+            <Link href="/matric">
+              <Text style={styles.linkRegister}>
+                Cadastre-se
+              </Text>
+            </Link>
+          </TouchableOpacity>
         </View>
-        <Input
-          placeholder="Usuário"
-          value={username}
-          onChangeText={setUsername}
-        />
-        <Input
-          placeholder="Senha"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-       <AuthButton label="Entrar" />
-        <Text style={styles.textRegister}>
-          Não tem uma conta?
-        </Text>
-        <TouchableOpacity>
-          <Link href="/matric">
-            <Text style={styles.linkRegister}>
-              Cadastre-se
-            </Text>
-          </Link>
-        </TouchableOpacity>
-      </View>
-    </ImagePattern>
+      </ImagePattern>
+    </>
   );
 }
 
@@ -70,9 +89,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     backgroundColor: '#fff',
   },
-
- 
-
   imageContainer: {
     marginBottom: 40,
     borderRadius: 50,
