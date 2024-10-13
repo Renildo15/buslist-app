@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 import { Text, View } from '@/components/Themed';
 import Input from '@/components/auth/input';
 import ImagePattern from '@/components/auth/image-pattern';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import AuthButton from '@/components/auth/auth-button';
 import { StatusBar } from 'expo-status-bar';
 import { useSession } from '@/context/AuthContext';
@@ -11,14 +11,22 @@ import { useSession } from '@/context/AuthContext';
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false)
 
-  const {authenticateUser, isLoading} = useSession();
+  const {signIn} = useSession();
 
   const handleLogin = async () => {
     try {
-      await authenticateUser(username, password);
+      setIsLoading(true);
+      await signIn(username, password);
+      setIsLoading(false);
     } catch (error) {
-      console.error(error);
+      console.error('Login error:', error);
+      setIsLoading(false);
+    } finally {
+      setUsername('');
+      setPassword('');
+      setIsLoading(false);
     }
   }
 
@@ -46,11 +54,14 @@ export default function Login() {
             onChangeText={setPassword}
             secureTextEntry
           />
-          <AuthButton 
-            label="Entrar"
-            onPress={handleLogin}
-            disabled={isLoading}
-          />
+          { isLoading ? (
+            <ActivityIndicator/>
+          ): (
+            <AuthButton 
+              label='Entrar'
+              onPress={handleLogin}
+            />
+          )}
           <Text style={styles.textRegister}>
             Não tem uma conta?
           </Text>

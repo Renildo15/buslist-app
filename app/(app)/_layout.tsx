@@ -1,13 +1,16 @@
 import React from "react"
 
 import { Redirect, Stack } from "expo-router"
-import { useSession } from "@/context/AuthContext"
+import * as SecureStore from "expo-secure-store";
+import { useSession } from "@/context/AuthContext";
 
+export const unstable_settings = {
+    initialRouteName: '(auth)',
+  };
+  
 export default function AppRootLayout() {
-    const { user } = useSession();
-
-    if (user === null) {
-        console.info("User is not authenticated, redirecting to auth");
+    const { session } = useSession();
+    if (!session) {
         return <Redirect href="/(auth)" />;
     }
     return (

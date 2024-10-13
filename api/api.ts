@@ -57,7 +57,6 @@ export async function login(username: string, password: string) {
         access: string;
         user: IUser;
     }
-    console.info(`apiUri: ${apiUri}`);
     try {
         const res = await axios.post<IResponse>(`${apiUri}/api/login/`, 
             {
@@ -65,7 +64,6 @@ export async function login(username: string, password: string) {
                 password: password,
             },
             {
-                timeout: 30000,
                 headers: {
                     Accept: "application/json",
                     "Content-Type": "application/json",
