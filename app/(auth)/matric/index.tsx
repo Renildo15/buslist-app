@@ -1,17 +1,28 @@
 import React, { useState } from 'react';
 import ImagePattern from "@/components/auth/image-pattern";
-import { StyleSheet, TextInput, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { View, Text } from "@/components/Themed";
 import Input from "@/components/auth/input";
 import AuthButton from '@/components/auth/auth-button';
 import { Link, router } from 'expo-router';
+import { getStudentInfo } from '@/api/api';
 
 export default function Matric() {
     const [matric, setMatric] = useState('');
+    const [isSearching, setIsSearching] = useState(false);
+    
+    const search = async () => {
+        setIsSearching(true);
+        const student = await getStudentInfo(matric);
+        if (student) {
+            router.push('/(auth)/register')
+        }
 
-    const handleMatric = () => {
-        router.push('/register');
+        console.log(JSON.stringify(student));
+        setIsSearching(false);
+
     }
+    
     return (
         <ImagePattern>
             <View style={styles.container}>
@@ -32,10 +43,15 @@ export default function Matric() {
                     onChangeText={setMatric}
                     keyboardType='numeric'
                 />
-                <AuthButton 
-                    label="Confirmar" 
-                    onPress={handleMatric} 
-                />
+                { isSearching ? (
+                    <ActivityIndicator/>
+                ):(
+                    <AuthButton 
+                        label="Confirmar" 
+                        onPress={search}
+                    />
+                )}
+                
                 <TouchableOpacity style={styles.registerContainer}>
                     <Text style={styles.textRegister}>
                         Já tem uma conta?

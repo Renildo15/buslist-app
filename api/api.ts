@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import useSWR from "swr";
 
 import { apiUri } from "./uri";
-import { IUser } from "./interfaces/user";
+import { IUser, IUserStudentInfo } from "./interfaces/user";
 
 
 async function fetcher(url: string, token?: string | null) {
@@ -32,8 +32,6 @@ async function fetcherSimple(url: string) {
 export function useHealthCheck() {
     const url = `${apiUri}/api/health-check/`;
 
-    console.info(`apiUri: ${url}`);
-
     interface IResponse {
         status: string;
         database: string;
@@ -41,13 +39,41 @@ export function useHealthCheck() {
     }
 
     const { data, error, isLoading, isValidating, mutate } = useSWR<IResponse>(url, fetcherSimple);
-    console.info(`data: ${data}`);
     return {
         data,
         error,
         isLoading,
         isValidating,
         mutate,
+    }
+}
+
+export async function getStudentInfo(matric: string) {
+    const url = `${apiUri}/api/users/student/info/`;
+
+    interface IResponse {
+        student: IUserStudentInfo;
+    }
+
+    try {
+        const res = await axios.post<IResponse>(url,{matric})
+        return res.data.student;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Axios error message:', error.message);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+                console.error('Response headers:', error.response.headers);
+            } else if (error.request) {
+                console.error('Request data:', error.request);
+            } else {
+                console.error('Error setting up request:', error.message);
+            }
+        } else {
+            console.error('Unexpected error:', error);
+        }
+        throw error;
     }
 }
 

@@ -1,0 +1,21 @@
+export enum StatusEnum {
+    ATIVO = 'ATIVO',
+    CANCELADO = 'CANCELADO',
+    CONCLUIDO = 'CONCLUIDO',
+}
+
+export enum SexEnum {
+    M = 'M',
+    F = 'F',
+}
+
+export enum TeachingLevelEnum {
+    GRADUACAO = 'GRADUACAO',
+    POS_GRADUACAO = 'POS_GRADUACAO',
+    MESTRADO = 'MESTRADO',
+    DOUTORADO = 'DOUTORADO',
+    TECNICO = 'TECNICO',
+    TECNICO_INTEGRADO = 'TECNICO_INTEGRADO',
+    FORMACAO_COMPLEMENTAR = 'FORMACAO_COMPLEMENTAR',
+    LATU_SENSU = 'LATU_SENSU',
+}
