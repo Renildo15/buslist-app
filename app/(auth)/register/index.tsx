@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ImagePattern from "@/components/auth/image-pattern";
 import { View, Text } from "@/components/Themed";
 import { StyleSheet, Image } from 'react-native';
 import Input from '@/components/auth/input';
 import AuthButton from '@/components/auth/auth-button';
+import { useSession } from '@/context/AuthContext';
+import { splitName } from '@/utils/splitName';
 
 export default function Register() {
     const [username, setUsername] = useState('');
@@ -12,6 +14,16 @@ export default function Register() {
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
+    const {student} = useSession();
+
+    useEffect(() => {
+      if(student){
+        const {firstName, lastName} = splitName(student.name_student);
+        setFirstName(firstName);
+        setLastName(lastName);
+      }
+    }, [student]);
   
     return (
       <ImagePattern>

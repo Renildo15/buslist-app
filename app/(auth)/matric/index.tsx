@@ -5,20 +5,18 @@ import { View, Text } from "@/components/Themed";
 import Input from "@/components/auth/input";
 import AuthButton from '@/components/auth/auth-button';
 import { Link, router } from 'expo-router';
-import { getStudentInfo } from '@/api/api';
+import { useSession } from '@/context/AuthContext';
+
 
 export default function Matric() {
     const [matric, setMatric] = useState('');
     const [isSearching, setIsSearching] = useState(false);
-    
+    const { studentInfo } = useSession();
+
     const search = async () => {
         setIsSearching(true);
-        const student = await getStudentInfo(matric);
-        if (student) {
-            router.push('/(auth)/register')
-        }
-
-        console.log(JSON.stringify(student));
+        await studentInfo(matric);
+        router.push('/(auth)/register')
         setIsSearching(false);
 
     }
