@@ -7,7 +7,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SessionProvider } from '@/context/AuthContext';
-
+import Toast from 'react-native-toast-message';
 import { useColorScheme } from '@/components/useColorScheme';
 
 
@@ -44,6 +44,7 @@ function RootLayoutNav() {
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <SafeAreaView style={{ flex: 1 }}>
           <Slot />
+          <Toast />
         </SafeAreaView>
       </ThemeProvider>
    </SessionProvider>

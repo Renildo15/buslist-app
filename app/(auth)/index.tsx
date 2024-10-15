@@ -1,9 +1,9 @@
 import { StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Text, View } from '@/components/Themed';
 import Input from '@/components/auth/input';
 import ImagePattern from '@/components/auth/image-pattern';
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
 import AuthButton from '@/components/auth/auth-button';
 import { StatusBar } from 'expo-status-bar';
 import { useSession } from '@/context/AuthContext';
@@ -15,19 +15,14 @@ export default function Login() {
 
   const {signIn} = useSession();
 
-  const handleLogin = async () => {
-    try {
-      setIsLoading(true);
-      await signIn(username, password);
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Login error:', error);
-      setIsLoading(false);
-    } finally {
-      setUsername('');
-      setPassword('');
-      setIsLoading(false);
-    }
+  const handleLogin = () => {
+    setIsLoading(true);
+    signIn(username, password);
+    setIsLoading(false);
+
+    setUsername('');
+    setPassword('');
+  
   }
 
   return (

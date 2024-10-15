@@ -3,6 +3,7 @@ import * as SecureStore from "expo-secure-store";
 import { IUser, IUserStudentCreate, IUserStudentInfo } from "@/api/interfaces/user";
 import { getStudentInfo, login, register } from "@/api/api";
 import { useStorageState } from "@/hooks/useStorageState";
+import Toast from "react-native-toast-message";
 
 const AuthContext = React.createContext<{
     signIn: (username: string, password:string) => void;
@@ -24,6 +25,7 @@ const AuthContext = React.createContext<{
     isLoading: false,
     user: {} as IUser,
     student: {} as IUserStudentInfo
+    
 });
 
 // This hook can be used to access the user info.
@@ -47,8 +49,24 @@ export function SessionProvider(props: React.PropsWithChildren) {
                         setSession(access);
                         setUser(user);
                         console.log(`Session set: ${access}`);
-                    } catch (error) {
+                    } catch (error: any) {
                         console.error("Login error:", error);
+                        const errors = error.response.data
+                        let  errorMessage = '';
+                        if(errors.username){
+                            errorMessage += `Usuário: ${errors.username.join(', ')}\n`;
+                        }
+                        
+                        if(errors.password){
+                            errorMessage += `Senha: ${errors.password.join(', ')}\n`;
+                        }
+
+                        Toast.show({
+                          type: 'error',
+                          text1: 'Erro ao entrar',
+                          text2: errorMessage,
+                          position: 'top',
+                        });
                     }
                 },
                 signOut: () => {
