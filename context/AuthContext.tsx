@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import { IUser, IUserStudentInfo } from "@/api/interfaces/user";
-import { getStudentInfo, login } from "@/api/api";
+import { IUser, IUserStudentCreate, IUserStudentInfo } from "@/api/interfaces/user";
+import { getStudentInfo, login, register } from "@/api/api";
 import { useStorageState } from "@/hooks/useStorageState";
 
 const AuthContext = React.createContext<{
@@ -9,6 +9,7 @@ const AuthContext = React.createContext<{
     whoAmI: () => void;
     signOut: () => void;
     studentInfo: (matric : string) => void;
+    studentRegister: (student: IUserStudentCreate) => void;
     session?: string | null;
     isLoading: boolean;
     user: IUser
@@ -18,6 +19,7 @@ const AuthContext = React.createContext<{
     whoAmI: () => null,
     signOut: () => null,
     studentInfo: (matric : string) => null,
+    studentRegister: (student: IUserStudentCreate) => null,
     session: null,
     isLoading: false,
     user: {} as IUser,
@@ -33,7 +35,7 @@ export function useSession() {
 export function SessionProvider(props: React.PropsWithChildren) {
     const [[isLoading, session], setSession] = useStorageState("session");
     const [user, setUser] = useState<IUser>({} as IUser);
-    const [userStudent, setUserStudent] = useState<IUserStudentInfo>({} as IUserStudentInfo);
+    const [userStudentInfo, setUserStudentInfo] = useState<IUserStudentInfo>({} as IUserStudentInfo);
     return (
         <AuthContext.Provider
             value={{
@@ -58,16 +60,26 @@ export function SessionProvider(props: React.PropsWithChildren) {
                     console.info(`Searching for student: ${matric}`);
                     try {
                         const student = await getStudentInfo(matric);
-                        setUserStudent(student);
+                        setUserStudentInfo(student);
                         console.log(JSON.stringify(student));
                     } catch (error) {
                         console.error("Student info error:", error);
                     }
                 },
+                studentRegister: async (student: IUserStudentCreate) => {
+                    console.info(`Registering student: ${student.username}`);
+                    try {
+                      const { access_token } = await register(student);
+                      await SecureStore.setItemAsync("session", access_token); 
+                      setSession(access_token);
+                    } catch (error) {
+                        console.error("Register error:", error);
+                    }
+                },
                 session,
                 isLoading,
                 user,
-                student: userStudent
+                student: userStudentInfo
             }}
         >
         {props.children}

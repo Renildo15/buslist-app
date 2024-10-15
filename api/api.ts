@@ -3,7 +3,7 @@ import axios, { AxiosError } from 'axios';
 import useSWR from "swr";
 
 import { apiUri } from "./uri";
-import { IUser, IUserStudentInfo } from "./interfaces/user";
+import { IUser, IUserStudent, IUserStudentCreate, IUserStudentInfo } from "./interfaces/user";
 
 
 async function fetcher(url: string, token?: string | null) {
@@ -58,6 +58,38 @@ export async function getStudentInfo(matric: string) {
     try {
         const res = await axios.post<IResponse>(url,{matric})
         return res.data.student;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Axios error message:', error.message);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+                console.error('Response headers:', error.response.headers);
+            } else if (error.request) {
+                console.error('Request data:', error.request);
+            } else {
+                console.error('Error setting up request:', error.message);
+            }
+        } else {
+            console.error('Unexpected error:', error);
+        }
+        throw error;
+    }
+}
+
+export async function register(data: IUserStudentCreate){
+    const url = `${apiUri}/api/users/student/register/`
+
+    interface IResponse {
+        message: string;
+        refresh_token: string;
+        access_token: string;
+        student: IUserStudent;
+    }
+
+    try {
+        const res = await axios.post<IResponse>(url, data)
+        return res.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
             console.error('Axios error message:', error.message);

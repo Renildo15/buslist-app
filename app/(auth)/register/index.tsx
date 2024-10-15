@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ImagePattern from "@/components/auth/image-pattern";
 import { View, Text } from "@/components/Themed";
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, ActivityIndicator } from 'react-native';
 import Input from '@/components/auth/input';
 import AuthButton from '@/components/auth/auth-button';
 import { useSession } from '@/context/AuthContext';
@@ -15,7 +15,9 @@ export default function Register() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    const {student} = useSession();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const { student, studentRegister } = useSession();
 
     useEffect(() => {
       if(student){
@@ -24,7 +26,29 @@ export default function Register() {
         setLastName(lastName);
       }
     }, [student]);
-  
+    
+    const handleRegister = async () => {
+      if(password !== confirmPassword){
+        alert('As senhas não conferem');
+        return;
+      }
+      try {
+        setIsLoading(true);
+        await studentRegister({
+          username,
+          email,
+          first_name: firstName,
+          last_name: lastName,
+          password
+        });
+      } catch (error) {
+        console.error('Register error:', error);
+        alert('Erro ao criar conta');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
     return (
       <ImagePattern>
         <View style={styles.container}>
@@ -71,7 +95,15 @@ export default function Register() {
                 onChangeText={setConfirmPassword}
                 secureTextEntry
             />
-            <AuthButton label="Cria conta" />
+            { isLoading ? (
+                <ActivityIndicator/>
+            ): (
+                <AuthButton 
+                  label='Cadastrar'
+                  onPress={handleRegister}
+                />
+            )}
+            
         </View>
       </ImagePattern>
     );
