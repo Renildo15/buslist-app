@@ -60,11 +60,11 @@ export async function getStudentInfo(matric: string) {
         return res.data.student;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error('Axios error message:', error.message);
+            console.debug('Axios error message:', error.message);
             if (error.response) {
-                console.error('Response data:', error.response.data);
-                console.error('Response status:', error.response.status);
-                console.error('Response headers:', error.response.headers);
+                console.debug('Response data:', error.response.data);
+                console.debug('Response status:', error.response.status);
+                console.debug('Response headers:', error.response.headers);
             } else if (error.request) {
                 console.error('Request data:', error.request);
             } else {
@@ -77,8 +77,8 @@ export async function getStudentInfo(matric: string) {
     }
 }
 
-export async function register(data: IUserStudentCreate){
-    const url = `${apiUri}/api/users/student/register/`
+export async function register(data: IUserStudentCreate, matric: string) {
+    const url = `${apiUri}/api/users/student/register/${matric}/`;
 
     interface IResponse {
         message: string;
@@ -92,11 +92,11 @@ export async function register(data: IUserStudentCreate){
         return res.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error('Axios error message:', error.message);
+            console.debug('Axios error message:', error.message);
             if (error.response) {
-                console.error('Response data:', error.response.data);
-                console.error('Response status:', error.response.status);
-                console.error('Response headers:', error.response.headers);
+                console.debug('Response data:', error.response.data);
+                console.debug('Response status:', error.response.status);
+                console.debug('Response headers:', error.response.headers);
             } else if (error.request) {
                 console.error('Request data:', error.request);
             } else {
@@ -133,12 +133,12 @@ export async function login(username: string, password: string) {
         return res.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error('Axios error message:', error.message);
+            console.debug('Axios error message:', error.message);
             if (error.response) {
                 // O servidor respondeu com um status diferente de 2xx
-                console.error('Response data:', error.response.data);
-                console.error('Response status:', error.response.status);
-                console.error('Response headers:', error.response.headers);
+                console.debug('Response data:', error.response.data);
+                console.debug('Response status:', error.response.status);
+                console.debug('Response headers:', error.response.headers);
             } else if (error.request) {
                 // A requisição foi feita, mas não houve resposta
                 console.error('Request data:', error.request);

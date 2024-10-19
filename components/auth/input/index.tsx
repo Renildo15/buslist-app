@@ -8,16 +8,18 @@ interface IInputProps extends TextInputProps {
   value: string;
   onChangeText: (text: string) => void;
   secureTextEntry?: boolean;
+  hasError?: boolean;
 }
 
 export default function Input(props: IInputProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   return (
-   <View style={styles.container}>
+   <View style={[styles.container, props.hasError && {borderColor: 'red'}]}>
     <TextInput
       style={styles.input}
       { ...props}
       secureTextEntry={props.secureTextEntry && !isPasswordVisible}
+      
       
     />
     {props.secureTextEntry && (

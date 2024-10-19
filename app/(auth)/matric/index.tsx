@@ -6,17 +6,37 @@ import Input from "@/components/auth/input";
 import AuthButton from '@/components/auth/auth-button';
 import { Link, router } from 'expo-router';
 import { useSession } from '@/context/AuthContext';
+import AuthErrors from '@/components/errors/auth-erros';
 
 
 export default function Matric() {
     const [matric, setMatric] = useState('');
     const [isSearching, setIsSearching] = useState(false);
     const { studentInfo } = useSession();
+    const [errors, setErrors] = useState({matric: ''});
 
-    const search = async () => {
+    const validateForm = () => {
+        let valid = true;
+        const newErrors = {matric: ''};
+
+        if(!matric.trim()) {
+            newErrors.matric ='Informe a matrícula';
+            valid = false;
+        } else if (matric.length < 11) {
+            newErrors.matric = 'A matrícula deve ter 11 caracteres';
+            valid = false;
+        }
+
+        setErrors(newErrors);
+        return valid;
+    }
+
+    const search = () => {
+
+        if (!validateForm()) return;
+
         setIsSearching(true);
-        await studentInfo(matric);
-        router.push('/(auth)/register')
+        studentInfo(matric);
         setIsSearching(false);
 
     }
@@ -35,12 +55,19 @@ export default function Matric() {
                 <Text style={styles.message}>
                     Para confirmar que você é um estudante universitário, por favor, insira o número de matrícula.
                 </Text>
-                <Input
-                    placeholder="Matrícula"
-                    value={matric}
-                    onChangeText={setMatric}
-                    keyboardType='numeric'
-                />
+                <View
+                    style={{backgroundColor: 'transparent'}}
+                >
+                    <AuthErrors error={errors.matric}/>
+                    <Input
+                        placeholder="Matrícula"
+                        value={matric}
+                        onChangeText={setMatric}
+                        keyboardType='numeric'
+                        hasError={!!errors.matric}
+                        maxLength={11}
+                    />
+                </View>
                 { isSearching ? (
                     <ActivityIndicator/>
                 ):(

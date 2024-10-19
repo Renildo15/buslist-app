@@ -4,13 +4,14 @@ import { IUser, IUserStudentCreate, IUserStudentInfo } from "@/api/interfaces/us
 import { getStudentInfo, login, register } from "@/api/api";
 import { useStorageState } from "@/hooks/useStorageState";
 import Toast from "react-native-toast-message";
+import { router } from "expo-router";
 
 const AuthContext = React.createContext<{
     signIn: (username: string, password:string) => void;
     whoAmI: () => void;
     signOut: () => void;
     studentInfo: (matric : string) => void;
-    studentRegister: (student: IUserStudentCreate) => void;
+    studentRegister: (student: IUserStudentCreate, matric: string) => void;
     session?: string | null;
     isLoading: boolean;
     user: IUser
@@ -79,15 +80,21 @@ export function SessionProvider(props: React.PropsWithChildren) {
                     try {
                         const student = await getStudentInfo(matric);
                         setUserStudentInfo(student);
-                        console.log(JSON.stringify(student));
-                    } catch (error) {
-                        console.error("Student info error:", error);
+                        router.push('/(auth)/register')
+                    } catch (error: any) {
+                        console.debug("Student info error:", error);
+                        Toast.show({
+                          type: 'error',
+                          text1: 'Erro ao buscar estudante',
+                          text2: error.response.data.error,
+                          position: 'top',
+                        });
                     }
                 },
-                studentRegister: async (student: IUserStudentCreate) => {
+                studentRegister: async (student: IUserStudentCreate, matric: string) => {
                     console.info(`Registering student: ${student.username}`);
                     try {
-                      const { access_token } = await register(student);
+                      const { access_token } = await register(student, matric);
                       await SecureStore.setItemAsync("session", access_token); 
                       setSession(access_token);
                     } catch (error) {
