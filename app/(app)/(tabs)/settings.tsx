@@ -1,11 +1,20 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { useSession } from '@/context/AuthContext';
+import { router } from 'expo-router';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 export default function TabSettings() {
-  return (
-    <View style={styles.container}>
-      <Text>Tab [Home|Settings]</Text>
-    </View>
-  );
+    const { signOut } = useSession();
+    const handleLogout = () => {
+        signOut();
+        router.replace('/(auth)');
+    }
+    return (
+        <View style={styles.container}>
+            <TouchableOpacity onPress={handleLogout}>
+                <Text>Sair</Text>
+            </TouchableOpacity>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
