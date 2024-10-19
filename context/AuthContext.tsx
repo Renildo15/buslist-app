@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { IUser, IUserStudentCreate, IUserStudentInfo } from "@/api/interfaces/user";
 import { getStudentInfo, login, register } from "@/api/api";
@@ -97,8 +97,15 @@ export function SessionProvider(props: React.PropsWithChildren) {
                       const { access_token } = await register(student, matric);
                       await SecureStore.setItemAsync("session", access_token); 
                       setSession(access_token);
-                    } catch (error) {
+                    } catch (error:any) {
                         console.error("Register error:", error);
+
+                        Toast.show({
+                          type: 'error',
+                          text1: 'Erro ao criar conta',
+                          text2: error.response.data.error,
+                          position: 'top',
+                        });
                     }
                 },
                 session,
