@@ -4,11 +4,10 @@ import Header from '@/components/home/header';
 import { Buslist } from '@/components/home/buslist';
 
 export default function TabHome() {
-    return (
-        <View style={styles.container}>
-           <Header />
-           <Buslist/>
-        </View>
-    )
+  return (
+    <View style={styles.container}>
+      <Header />
+      <Buslist />
+    </View>
+  );
 }
-

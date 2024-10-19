@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Slot, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -9,7 +13,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { SessionProvider } from '@/context/AuthContext';
 import Toast from 'react-native-toast-message';
 import { useColorScheme } from '@/components/useColorScheme';
-
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -21,7 +24,6 @@ export default function RootLayout() {
   useEffect(() => {
     if (error) throw error;
   }, [error]);
-
 
   useEffect(() => {
     if (loaded) {
@@ -38,15 +40,15 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
- 
+
   return (
-   <SessionProvider>
+    <SessionProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <SafeAreaView style={{ flex: 1 }}>
           <Slot />
           <Toast />
         </SafeAreaView>
       </ThemeProvider>
-   </SessionProvider>
+    </SessionProvider>
   );
 }

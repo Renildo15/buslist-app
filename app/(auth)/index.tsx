@@ -1,4 +1,9 @@
-import { StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import React, { useState } from 'react';
 import { Text, View } from '@/components/Themed';
 import Input from '@/components/auth/input';
@@ -12,14 +17,14 @@ import AuthErrors from '@/components/errors/auth-erros';
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false)
-  const [errors, setErrors] = useState({username: '', password: ''});
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({ username: '', password: '' });
 
-  const {signIn} = useSession();
+  const { signIn } = useSession();
 
   const validateForm = () => {
     let valid = true;
-    const newErrors = {username: '', password: ''};
+    const newErrors = { username: '', password: '' };
 
     if (!username.trim()) {
       newErrors.username = 'Informe o usuário';
@@ -36,7 +41,7 @@ export default function Login() {
 
     setErrors(newErrors);
     return valid;
-  }
+  };
 
   const handleLogin = () => {
     if (!validateForm()) return;
@@ -47,26 +52,21 @@ export default function Login() {
 
     setUsername('');
     setPassword('');
-  
-  }
+  };
 
   return (
     <>
-    <StatusBar backgroundColor='#007bff'/>
+      <StatusBar backgroundColor="#007bff" />
       <ImagePattern>
         <View style={styles.container}>
-          <View
-            style={styles.imageContainer}
-          >
+          <View style={styles.imageContainer}>
             <Image
               source={require('../../assets/images/logo.png')}
               style={styles.image}
             />
           </View>
-          <View
-            style={{backgroundColor:'transparent'}}
-          >
-            <AuthErrors error={errors.username}/>
+          <View style={{ backgroundColor: 'transparent' }}>
+            <AuthErrors error={errors.username} />
             <Input
               placeholder="Usuário"
               value={username}
@@ -74,11 +74,9 @@ export default function Login() {
               hasError={!!errors.username}
             />
           </View>
-          
-          <View
-            style={{backgroundColor:'transparent'}}
-          >
-            <AuthErrors error={errors.password}/>
+
+          <View style={{ backgroundColor: 'transparent' }}>
+            <AuthErrors error={errors.password} />
             <Input
               placeholder="Senha"
               value={password}
@@ -87,23 +85,16 @@ export default function Login() {
               hasError={!!errors.password}
             />
           </View>
-         
-          { isLoading ? (
-            <ActivityIndicator/>
-          ): (
-            <AuthButton 
-              label='Entrar'
-              onPress={handleLogin}
-            />
+
+          {isLoading ? (
+            <ActivityIndicator />
+          ) : (
+            <AuthButton label="Entrar" onPress={handleLogin} />
           )}
-          <Text style={styles.textRegister}>
-            Não tem uma conta?
-          </Text>
+          <Text style={styles.textRegister}>Não tem uma conta?</Text>
           <TouchableOpacity>
             <Link href="/matric">
-              <Text style={styles.linkRegister}>
-                Cadastre-se
-              </Text>
+              <Text style={styles.linkRegister}>Cadastre-se</Text>
             </Link>
           </TouchableOpacity>
         </View>
