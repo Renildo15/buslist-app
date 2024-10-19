@@ -1,4 +1,5 @@
 import { splitName } from "./splitName";
 import { validateField } from "./validateField";
+import { formattedDate } from "./formattedDate";
 
-export { splitName, validateField };
+export { splitName, validateField, formattedDate };

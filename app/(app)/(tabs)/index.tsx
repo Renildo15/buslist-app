@@ -1,11 +1,12 @@
 import { useSession } from '@/context/AuthContext';
 import { router } from 'expo-router';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { Text, View } from '@/components/Themed';
+import { styles } from './styles';
+import Header from '@/components/home/header';
 
 export default function TabHome() {
-    const { signOut, user } = useSession();
-
+    const { signOut } = useSession();
     const handleLogout = () => {
         signOut();
         router.replace('/(auth)');
@@ -13,6 +14,7 @@ export default function TabHome() {
 
     return (
         <View style={styles.container}>
+           <Header />
             <Text>Home</Text>
             <TouchableOpacity onPress={handleLogout}>
                 <Text>Sair</Text>
@@ -21,10 +23,3 @@ export default function TabHome() {
     )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
