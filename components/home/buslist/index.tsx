@@ -4,6 +4,7 @@ import { View, FlatList } from 'react-native';
 import CardBuslist from '@/components/card-buslist';
 import { useBuslistToday } from '@/api/api';
 import { useSession } from '@/context/AuthContext';
+import Error from '@/components/errors/error';
 
 export function Buslist() {
 
@@ -13,8 +14,13 @@ export function Buslist() {
   const today = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 
   const {
-    data: buslist
+    data: buslist,
+    error: errorBuslist,
   } = useBuslistToday(session ?? null, dateToday);
+
+  if (errorBuslist) {
+    return <Error message={errorBuslist}/>
+  }
   
   return (
     <View style={styles.container}>
