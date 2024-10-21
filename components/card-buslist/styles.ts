@@ -12,13 +12,21 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white',
     elevation: 5,
   },
-  status: {
+  status_enable: {
     width: 10,
     height: 10,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'green',
+  },
+  status_not_enable: {
+    width: 10,
+    height: 10,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'red',
   },
   status_content: {
     flexDirection: 'row',
@@ -30,9 +38,15 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 5,
   },
-  status_text: {
+  enable: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: 'green',
+  },
+  not_enable: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'red',
   },
   shift_text: {
     fontSize: 16,

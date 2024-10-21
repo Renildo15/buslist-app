@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import useSWR from 'swr';
 
 import { apiUri } from './uri';
@@ -9,15 +8,20 @@ import {
   IUserStudentCreate,
   IUserStudentInfo,
 } from './interfaces/user';
+import { IBusList } from './interfaces/buslist';
 
 async function fetcher(url: string, token?: string | null) {
   const res = await fetch(url, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      Authorization: token ? `Bearer ${token}` : '',
     },
   });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch');
+  }
 
   return res.json();
 }
@@ -160,4 +164,32 @@ export async function login(username: string, password: string) {
     }
     throw error;
   }
+}
+
+export function useBuslistToday(token: string | null, date: string) {
+  let url = `${apiUri}/api/buslists/list/enable/`;
+
+  if (date !== '' && date !== undefined) {
+    url += `?date=${date}`;
+  }
+
+  interface IResponse {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: IBusList[];
+  }
+
+  const { data, error, isLoading, isValidating, mutate } = useSWR<IResponse>(
+    [url],
+    () => fetcher(url, token)
+  );
+
+  return {
+    data,
+    error,
+    isLoading,
+    isValidating,
+    mutate,
+  };
 }

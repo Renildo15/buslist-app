@@ -24,4 +24,7 @@ export const styles = StyleSheet.create({
     borderColor: 'black',
     margin: 10,
   },
+  separator: {
+    height: 20,
+  }
 });
