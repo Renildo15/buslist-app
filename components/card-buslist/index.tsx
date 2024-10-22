@@ -6,11 +6,10 @@ import { IBusList } from '@/api/interfaces/buslist';
 import { getShiftName } from '@/utils';
 
 interface CardBuslistProps {
-  buslist: IBusList
+  buslist: IBusList;
 }
 
 export default function CardBuslist({ buslist }: CardBuslistProps) {
-
   function formatDate(date: string) {
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
@@ -29,8 +28,14 @@ export default function CardBuslist({ buslist }: CardBuslistProps) {
     <View style={styles.card_buslist}>
       <View style={styles.status_content}>
         <View style={styles.status_box}>
-          <View style={ buslist ? styles.status_enable: styles.status_not_enable}></View>
-          {buslist.is_enable ? <Text style={styles.enable}>Disponível</Text> : <Text style={styles.not_enable}>Indisponível</Text>}
+          <View
+            style={buslist ? styles.status_enable : styles.status_not_enable}
+          ></View>
+          {buslist.is_enable ? (
+            <Text style={styles.enable}>Disponível</Text>
+          ) : (
+            <Text style={styles.not_enable}>Indisponível</Text>
+          )}
         </View>
         <Text style={styles.shift_text}>{getShiftName(buslist.shift)}</Text>
       </View>
@@ -40,8 +45,12 @@ export default function CardBuslist({ buslist }: CardBuslistProps) {
       </View>
       <View style={styles.buslist_info_II}>
         <View style={{ gap: 4 }}>
-          <Text style={styles.buslist_hours_init}>Inicio - {formatTime(buslist.list_time_initial)}</Text>
-          <Text style={styles.buslist_hours_end}>Término - {formatTime(buslist.list_time_final)}</Text>
+          <Text style={styles.buslist_hours_init}>
+            Inicio - {formatTime(buslist.list_time_initial)}
+          </Text>
+          <Text style={styles.buslist_hours_end}>
+            Término - {formatTime(buslist.list_time_final)}
+          </Text>
         </View>
         <View style={{ gap: 4 }}>
           <TouchableOpacity activeOpacity={0.8} style={styles.button_entry}>

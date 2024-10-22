@@ -26,5 +26,5 @@ export const styles = StyleSheet.create({
   },
   separator: {
     height: 20,
-  }
+  },
 });

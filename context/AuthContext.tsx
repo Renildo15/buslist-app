@@ -86,7 +86,6 @@ export function SessionProvider(props: React.PropsWithChildren) {
             setUser(data?.user);
 
             return data?.user;
-
           } catch (error: any) {
             console.error('WhoAmI error:', error);
             setSession(null);

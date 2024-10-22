@@ -1,5 +1,5 @@
 export enum ShiftEnum {
-    M = 'M',
-    V = 'V',
-    N = 'N',
+  M = 'M',
+  V = 'V',
+  N = 'N',
 }

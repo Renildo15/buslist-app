@@ -37,11 +37,11 @@ async function fetcherSimple(url: string) {
   return res.json();
 }
 
-export function useWhoAmI(token: string | null){
+export function useWhoAmI(token: string | null) {
   const url = `${apiUri}/api/users/whoami/`;
 
   interface IResponse {
-    user: IUserStudent
+    user: IUserStudent;
   }
 
   const { data, error, isLoading, isValidating, mutate } = useSWR<IResponse>(
@@ -55,7 +55,7 @@ export function useWhoAmI(token: string | null){
     isLoading,
     isValidating,
     mutate,
-  }
+  };
 }
 
 export function useHealthCheck() {

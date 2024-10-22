@@ -10,7 +10,9 @@ interface IAvatarProps {
 }
 
 export default function Avatar(props: IAvatarProps) {
-  const img = props.uri ? { uri: `${apiUri}/${props.uri}` } : require('../../../assets/images/avatar.jpg');
+  const img = props.uri
+    ? { uri: `${apiUri}/${props.uri}` }
+    : require('../../../assets/images/avatar.jpg');
   return (
     <Image
       style={{
