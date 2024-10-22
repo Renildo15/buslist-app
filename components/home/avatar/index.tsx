@@ -1,3 +1,4 @@
+import { apiUri } from '@/api/uri';
 import React from 'react';
 import { Image } from 'react-native';
 
@@ -9,14 +10,17 @@ interface IAvatarProps {
 }
 
 export default function Avatar(props: IAvatarProps) {
+  const img = props.uri ? { uri: `${apiUri}/${props.uri}` } : require('../../../assets/images/avatar.jpg');
   return (
     <Image
       style={{
         width: props.width,
         height: props.height,
         borderRadius: props.borderRadius,
+        borderWidth: 1,
+        borderColor: 'white',
       }}
-      source={{ uri: props.uri }}
+      source={img}
     />
   );
 }

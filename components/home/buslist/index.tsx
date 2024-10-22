@@ -19,7 +19,7 @@ export function Buslist() {
   } = useBuslistToday(session ?? null, dateToday);
 
   if (errorBuslist) {
-    return <Error message={errorBuslist}/>
+    return <Error message={errorBuslist.message}/>
   }
   
   return (

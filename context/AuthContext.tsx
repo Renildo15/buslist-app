@@ -2,33 +2,34 @@ import React, { useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import {
   IUser,
+  IUserStudent,
   IUserStudentCreate,
   IUserStudentInfo,
 } from '@/api/interfaces/user';
-import { getStudentInfo, login, register } from '@/api/api';
+import { getStudentInfo, login, register, useWhoAmI } from '@/api/api';
 import { useStorageState } from '@/hooks/useStorageState';
 import Toast from 'react-native-toast-message';
 import { router } from 'expo-router';
 
 const AuthContext = React.createContext<{
   signIn: (username: string, password: string) => void;
-  whoAmI: () => void;
+  whoAmI: () => IUserStudent | undefined;
   signOut: () => void;
   studentInfo: (matric: string) => void;
   studentRegister: (student: IUserStudentCreate, matric: string) => void;
   session?: string | null;
   isLoading: boolean;
-  user: IUser;
+  user: IUserStudent | undefined;
   student: IUserStudentInfo;
 }>({
   signIn: (username: string, password: string) => null,
-  whoAmI: () => null,
+  whoAmI: () => undefined,
   signOut: () => null,
   studentInfo: (matric: string) => null,
   studentRegister: (student: IUserStudentCreate) => null,
   session: null,
   isLoading: false,
-  user: {} as IUser,
+  user: {} as IUserStudent | undefined,
   student: {} as IUserStudentInfo,
 });
 
@@ -40,7 +41,7 @@ export function useSession() {
 
 export function SessionProvider(props: React.PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState('session');
-  const [user, setUser] = useState<IUser>({} as IUser);
+  const [user, setUser] = useState<IUserStudent>();
   const [userStudentInfo, setUserStudentInfo] = useState<IUserStudentInfo>(
     {} as IUserStudentInfo
   );
@@ -50,10 +51,9 @@ export function SessionProvider(props: React.PropsWithChildren) {
         signIn: async (username: string, password: string) => {
           try {
             console.info(`Login: ${username}`);
-            const { access, user } = await login(username, password);
+            const { access } = await login(username, password);
             await SecureStore.setItemAsync('session', access);
             setSession(access);
-            setUser(user);
             console.log(`Session set: ${access}`);
           } catch (error: any) {
             console.error('Login error:', error);
@@ -77,9 +77,21 @@ export function SessionProvider(props: React.PropsWithChildren) {
         },
         signOut: () => {
           setSession(null);
-          setUser({} as IUser);
+          setUser({} as IUserStudent);
         },
-        whoAmI: async () => {},
+        whoAmI: () => {
+          console.info('Checking user session');
+          try {
+            const { data } = useWhoAmI(session ?? null);
+            setUser(data?.user);
+
+            return data?.user;
+
+          } catch (error: any) {
+            console.error('WhoAmI error:', error);
+            setSession(null);
+          }
+        },
         studentInfo: async (matric: string) => {
           console.info(`Searching for student: ${matric}`);
           try {
