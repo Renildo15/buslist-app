@@ -5,6 +5,7 @@ import CardBuslist from '@/components/card-buslist';
 import { useBuslistToday } from '@/api/api';
 import { useSession } from '@/context/AuthContext';
 import Error from '@/components/errors/error';
+import Empty from '@/components/empty';
 
 export function Buslist() {
   const { session } = useSession();
@@ -29,10 +30,12 @@ export function Buslist() {
       </View>
       <FlatList
         style={{ width: '100%' }}
+        contentContainerStyle={{alignItems: 'center', flex:1}}
         data={buslist?.results ?? []}
         renderItem={({ item }) => <CardBuslist buslist={item} />}
         keyExtractor={(item) => item.id.toString()}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
+        ListEmptyComponent={() => <Empty message="Nenhuma lista encontrada" />}
       />
     </View>
   );
