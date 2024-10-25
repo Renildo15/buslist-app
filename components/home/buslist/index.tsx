@@ -30,7 +30,7 @@ export function Buslist() {
       </View>
       <FlatList
         style={{ width: '100%' }}
-        contentContainerStyle={{alignItems: 'center', flex:1}}
+        contentContainerStyle={{ alignItems: 'center', flex: 1 }}
         data={buslist?.results ?? []}
         renderItem={({ item }) => <CardBuslist buslist={item} />}
         keyExtractor={(item) => item.id.toString()}

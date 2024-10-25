@@ -1,14 +1,22 @@
+import React, { useEffect, useState } from 'react';
 import { View, Text } from '@/components/Themed';
-import { Image } from 'react-native';
 import { styles } from './styles';
 import { formattedDate } from '@/utils';
 import Avatar from '../avatar';
 import { useSession } from '@/context/AuthContext';
+import { IUserStudent } from '@/api/interfaces/user';
 
 export default function Header() {
+  const [user, setUser] = useState<IUserStudent | null>(null);
   const dateNow = formattedDate();
   const { whoAmI } = useSession();
-  const user = whoAmI();
+  const currentUser = whoAmI();
+
+  useEffect(() => {
+    if (currentUser) {
+      setUser(currentUser);
+    }
+  }, [whoAmI]);
 
   return (
     <View style={styles.header}>
