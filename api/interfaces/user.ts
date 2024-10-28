@@ -45,3 +45,14 @@ export interface IUserStudentCreate {
 export interface IUserStudent extends IUser {
   profile: IUserStudentProfile;
 }
+
+export interface IUserStudentUpdate {
+  username?: string;
+  email?: string;
+}
+export interface IUserStudentProfileUpdate {
+  avatar?: string;
+  phone_number?: string;
+  bus_stop?: string;
+  user?: IUserStudentUpdate;
+}
