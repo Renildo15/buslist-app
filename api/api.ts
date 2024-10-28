@@ -7,8 +7,10 @@ import {
   IUserStudent,
   IUserStudentCreate,
   IUserStudentInfo,
+  IUserStudentProfileUpdate,
 } from './interfaces/user';
 import { IBusList } from './interfaces/buslist';
+import { IBusStop } from './interfaces/busstop';
 
 async function fetcher(url: string, token?: string | null) {
   const res = await fetch(url, {
@@ -187,6 +189,40 @@ export async function login(username: string, password: string) {
   }
 }
 
+export async function updateStudent(token: string | null, studentID: string, data:IUserStudentProfileUpdate) {
+  const url = `${apiUri}/api/users/student/${studentID}/profile/update/`;
+
+  interface IResponse {
+    message: string;
+  }
+
+  try {
+    const res = await axios.patch<IResponse>(url, data,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.debug('Axios error message:', error.message);
+      if (error.response) {
+        console.debug('Response data:', error.response.data);
+        console.debug('Response status:', error.response.status);
+        console.debug('Response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('Request data:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    throw error;
+  }
+
+}
+
 export function useBuslistToday(token: string | null, date: string) {
   let url = `${apiUri}/api/buslists/list/enable/`;
 
@@ -199,6 +235,27 @@ export function useBuslistToday(token: string | null, date: string) {
     next: string | null;
     previous: string | null;
     results: IBusList[];
+  }
+
+  const { data, error, isLoading, isValidating, mutate } = useSWR<IResponse>(
+    [url],
+    () => fetcher(url, token)
+  );
+
+  return {
+    data,
+    error,
+    isLoading,
+    isValidating,
+    mutate,
+  };
+}
+
+export function useBusStops(token: string | null) {
+  const url = `${apiUri}/api/busstops/bus-stop-list/`;
+
+  interface IResponse {
+    bus_stop: IBusStop[];
   }
 
   const { data, error, isLoading, isValidating, mutate } = useSWR<IResponse>(
