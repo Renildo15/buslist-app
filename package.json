@@ -35,7 +35,8 @@
     "react-native-select-dropdown": "^4.0.1",
     "react-native-toast-message": "^2.2.1",
     "react-native-web": "~0.19.10",
-    "swr": "^2.2.5"
+    "swr": "^2.2.5",
+    "expo-image-picker": "~15.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
