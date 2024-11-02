@@ -32,6 +32,7 @@ export interface IUserStudentInfo {
   status_student: StatusEnum;
   teaching_level_student: TeachingLevelEnum;
   course_student: string;
+  institution_student: string;
 }
 
 export interface IUserStudentCreate {
@@ -55,4 +56,16 @@ export interface IUserStudentProfileUpdate {
   phone_number?: string;
   bus_stop?: string;
   user?: IUserStudentUpdate;
+}
+
+export interface IUserStudentProfileCreate {
+  phone_number: string;
+  matric_number: string;
+  sex: SexEnum;
+  status: StatusEnum;
+  teaching_level: TeachingLevelEnum;
+  course_name: string;
+  bus_stop: string;
+  user: string;
+  institution: string;
 }

@@ -7,6 +7,7 @@ import {
   IUserStudent,
   IUserStudentCreate,
   IUserStudentInfo,
+  IUserStudentProfileCreate,
   IUserStudentProfileUpdate,
 } from './interfaces/user';
 import { IBusList } from './interfaces/buslist';
@@ -189,7 +190,11 @@ export async function login(username: string, password: string) {
   }
 }
 
-export async function updateStudent(token: string | null, studentID: string, data:IUserStudentProfileUpdate) {
+export async function updateStudent(
+  token: string | null,
+  studentID: string,
+  data: IUserStudentProfileUpdate
+) {
   const url = `${apiUri}/api/users/student/${studentID}/profile/update/`;
 
   interface IResponse {
@@ -197,11 +202,11 @@ export async function updateStudent(token: string | null, studentID: string, dat
   }
 
   try {
-    const res = await axios.patch<IResponse>(url, data,{
+    const res = await axios.patch<IResponse>(url, data, {
       headers: {
         Authorization: `Bearer ${token}`,
-      }
-    })
+      },
+    });
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -220,8 +225,44 @@ export async function updateStudent(token: string | null, studentID: string, dat
     }
     throw error;
   }
-
 }
+
+export async function createStudent(
+  token: string | null,
+  data: IUserStudentProfileCreate
+) {
+  const url = `${apiUri}/api/users/student/profile/create/`;
+
+  interface IResponse {
+    message: string;
+  }
+
+  try {
+    const res = await axios.post<IResponse>(url, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.debug('Axios error message:', error.message);
+      if (error.response) {
+        console.debug('Response data:', error.response.data);
+        console.debug('Response status:', error.response.status);
+        console.debug('Response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('Request data:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    throw error;
+  }
+}
+
 
 export async function uploadAvatar(token: string | null, data: FormData) {
   const url = `${apiUri}/api/users/avatar/upload/`;
@@ -234,9 +275,9 @@ export async function uploadAvatar(token: string | null, data: FormData) {
     const res = await axios.patch<IResponse>(url, data, {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'multipart/form-data'
-      }
-    })
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
