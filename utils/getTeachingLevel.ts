@@ -11,12 +11,36 @@ export function getTeachingLevel(teachingLevel: string | undefined) {
     case 'TECNICO':
       return 'Técnico';
     case 'TECNICO_INTEGRADO':
-        return 'Técnico integrado';
+      return 'Técnico integrado';
     case 'FORMACAO_COMPLEMENTAR':
-        return 'Formação complementar';
+      return 'Formação complementar';
     case 'LATU_SENSU':
-        return 'Lato sensu';
+      return 'Lato sensu';
     default:
       return teachingLevel;
+  }
+}
+
+
+export function getTeachingLevelKey(teachingLevelName: string | undefined) {
+  switch (teachingLevelName) {
+    case 'Graduação':
+      return 'GRADUACAO';
+    case 'Pós-graduação':
+      return 'POS_GRADUACAO';
+    case 'Mestrado':
+      return 'MESTRADO';
+    case 'Doutorado':
+      return 'DOUTORADO';
+    case 'Técnico':
+      return 'TECNICO';
+    case 'Técnico integrado':
+      return 'TECNICO_INTEGRADO';
+    case 'Formação complementar':
+      return 'FORMACAO_COMPLEMENTAR';
+    case 'Lato sensu':
+      return 'LATU_SENSU';
+    default:
+      return teachingLevelName;
   }
 }
