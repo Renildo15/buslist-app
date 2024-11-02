@@ -6,7 +6,7 @@ import { styles } from './styles';
 import { useSession } from '@/context/AuthContext';
 import SelectBusStop from './select-bus-stop';
 import { updateStudent, useBusStops, useWhoAmI } from '@/api/api';
-import { ActivityIndicator } from 'react-native'
+import { ActivityIndicator } from 'react-native';
 import { IUserStudentProfileUpdate } from '@/api/interfaces/user';
 import Toast from 'react-native-toast-message';
 import { IBusStop } from '@/api/interfaces/busstop';
@@ -18,12 +18,12 @@ export default function UpdateStudent() {
   const [stop, setStop] = useState('');
   const [busStopId, setBusStopId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const { whoAmI, session } = useSession();
-  const { mutate: userMutate} = useWhoAmI(session ?? '');
+  const { mutate: userMutate } = useWhoAmI(session ?? '');
   const currentUser = whoAmI();
-  
-  const {data:busStops} = useBusStops(session ?? '')
+
+  const { data: busStops } = useBusStops(session ?? '');
 
   const [originalData, setOriginalData] = useState({
     username: '',
@@ -49,15 +49,15 @@ export default function UpdateStudent() {
   }, [whoAmI]);
 
   const handleSelectBusStop = (bustop: IBusStop) => {
-    setStop(bustop.name)
-    setBusStopId(bustop.id)
-  }
+    setStop(bustop.name);
+    setBusStopId(bustop.id);
+  };
 
   const handleSave = async () => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const data: IUserStudentProfileUpdate = {
-        user: {}
+        user: {},
       };
 
       if (username !== originalData.username) {
@@ -82,16 +82,20 @@ export default function UpdateStudent() {
         return;
       }
 
-      const response = await updateStudent(session ?? '', currentUser?.id ?? '', data)
+      const response = await updateStudent(
+        session ?? '',
+        currentUser?.id ?? '',
+        data
+      );
       if (response) {
         Toast.show({
           type: 'success',
           text1: 'Dados atualizados',
           position: 'top',
         });
-        userMutate()
+        userMutate();
       }
-    } catch (error:any) {
+    } catch (error: any) {
       console.error('Error updating student:', error);
       Toast.show({
         type: 'error',
@@ -99,17 +103,35 @@ export default function UpdateStudent() {
         position: 'top',
       });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.header_text}>Atualizar informações</Text>
-      <Input placeholder="Usuário" value={username} onChangeText={setUsername} />
+      <Input
+        placeholder="Usuário"
+        value={username}
+        onChangeText={setUsername}
+      />
       <Input placeholder="Email" value={email} onChangeText={setEmail} />
-      <Input placeholder="Whatsapp" value={whatsapp} onChangeText={setWhatsapp} />
-      <SelectBusStop data={busStops?.bus_stop ?? []} onSelect={handleSelectBusStop} initialSelectedItem={busStops?.bus_stop.find(stop => stop.name === currentUser?.profile.bus_stop) || undefined} />
+      <Input
+        placeholder="Whatsapp"
+        value={whatsapp}
+        onChangeText={setWhatsapp}
+      />
+      <SelectBusStop
+        data={busStops?.bus_stop ?? []}
+        onSelect={handleSelectBusStop}
+        initialSelectedItem={
+          busStops && busStops.bus_stop
+            ? busStops.bus_stop.find(
+                (stop) => stop.name === currentUser?.profile?.bus_stop
+              )
+            : undefined
+        }
+      />
 
       {isLoading ? (
         <ActivityIndicator size="large" color="#0000ff" />

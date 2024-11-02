@@ -25,7 +25,7 @@ export default function Header() {
           width={50}
           height={50}
           borderRadius={25}
-          uri={user?.profile.avatar ?? ''}
+          uri={user?.profile?.avatar ?? ''}
         />
         <Text style={styles.welcome_message}>Olá, {user?.username}</Text>
       </View>

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import ImagePattern from '@/components/auth/image-pattern';
-import { View, Text } from '@/components/Themed';
+import { View } from '@/components/Themed';
 import { StyleSheet, Image, ActivityIndicator } from 'react-native';
 import Input from '@/components/auth/input';
 import AuthButton from '@/components/auth/auth-button';
 import { useSession } from '@/context/AuthContext';
 import AuthErrors from '@/components/errors/auth-erros';
 import { validateField, splitName } from '@/utils';
+import { router } from 'expo-router';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -76,6 +77,8 @@ export default function Register() {
         },
         student.matriculation_student
       );
+
+      router.replace('/(profile)/');
     } catch (error) {
       console.error('Register error:', error);
       alert('Erro ao criar conta');
@@ -150,7 +153,6 @@ export default function Register() {
             secureTextEntry
           />
         </View>
-
         {isLoading ? (
           <ActivityIndicator />
         ) : (

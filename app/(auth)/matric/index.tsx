@@ -9,7 +9,7 @@ import {
 import { View, Text } from '@/components/Themed';
 import Input from '@/components/auth/input';
 import AuthButton from '@/components/auth/auth-button';
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
 import { useSession } from '@/context/AuthContext';
 import AuthErrors from '@/components/errors/auth-erros';
 

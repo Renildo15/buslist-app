@@ -17,13 +17,13 @@ export const styles = StyleSheet.create({
     bottom: 5,
   },
   box_update_avatar: {
-    justifyContent:'center', 
-    alignItems:'center',
-    marginTop:10
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
   },
   button_update_avatar: {
-    padding:10, 
-    borderRadius:5, 
-    backgroundColor:'#007bff'
-  }
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#007bff',
+  },
 });

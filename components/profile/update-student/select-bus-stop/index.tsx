@@ -10,7 +10,11 @@ interface ISelectBusStopProps {
   initialSelectedItem?: IBusStop;
 }
 
-export default function SelectBusStop({ data, onSelect, initialSelectedItem }: ISelectBusStopProps) {
+export default function SelectBusStop({
+  data,
+  onSelect,
+  initialSelectedItem,
+}: ISelectBusStopProps) {
   const [selectedItem, setSelectedItem] = useState<IBusStop | null>(null);
 
   useEffect(() => {
