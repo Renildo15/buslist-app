@@ -3,17 +3,25 @@ import { View } from "@/components/Themed";
 import Feather from "@expo/vector-icons/Feather";
 import { TouchableOpacity, Text } from "react-native";
 import { styles } from "./styles";
+import { useState } from "react";
+import ModalNotice from "../modal-notice";
 
 interface INoticeProps {
     notice: INotice;
 }
 
 export default function CardNotice({ notice }: INoticeProps) {
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const handleModal = () => {
+        setModalVisible(!modalVisible);
+    }
+
     return (
       <TouchableOpacity style={[
         styles.content_notice,
         { backgroundColor: notice.viewed ? '#F0F0F0' : '#E6F7FF' }
-      ]} onPress={() => {}} activeOpacity={0.8}>
+      ]} onPress={handleModal} activeOpacity={0.8}>
         <View style={{ backgroundColor: 'transparent' }}>
           <Feather name="alert-triangle" size={50} color="#007bff" />
         </View>
@@ -34,6 +42,7 @@ export default function CardNotice({ notice }: INoticeProps) {
             { backgroundColor: notice.viewed ? '#D3D3D3' : '#007bff' } // Círculo cinza se lido, azul se não lido
           ]}
         />
+        {modalVisible && <ModalNotice notice={notice} modalVisible={modalVisible} setModalVisible={setModalVisible} />}
       </TouchableOpacity>
     );
   }
