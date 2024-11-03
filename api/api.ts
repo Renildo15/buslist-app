@@ -12,6 +12,7 @@ import {
 } from './interfaces/user';
 import { IBusList } from './interfaces/buslist';
 import { IBusStop } from './interfaces/busstop';
+import { INotice } from './interfaces/notice';
 
 async function fetcher(url: string, token?: string | null) {
   const res = await fetch(url, {
@@ -331,6 +332,30 @@ export function useBusStops(token: string | null) {
 
   interface IResponse {
     bus_stop: IBusStop[];
+  }
+
+  const { data, error, isLoading, isValidating, mutate } = useSWR<IResponse>(
+    [url],
+    () => fetcher(url, token)
+  );
+
+  return {
+    data,
+    error,
+    isLoading,
+    isValidating,
+    mutate,
+  };
+}
+
+export function useNotices(token: string | null) {
+  const url = `${apiUri}/api/buslists/notices/`;
+
+  interface IResponse {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: INotice[];
   }
 
   const { data, error, isLoading, isValidating, mutate } = useSWR<IResponse>(
