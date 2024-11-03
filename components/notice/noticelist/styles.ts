@@ -28,9 +28,9 @@ export const styles = StyleSheet.create({
     height: 20,
   },
   content_notice: {
-    borderWidth:1, 
-    flexDirection:'row', 
-    alignItems: 'center', 
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
     width: '100%',
     borderRadius: 20,
     overflow: 'hidden',
@@ -39,5 +39,5 @@ export const styles = StyleSheet.create({
     gap: 5,
     backgroundColor: 'white',
     elevation: 5,
-}
+  },
 });

@@ -264,7 +264,6 @@ export async function createStudent(
   }
 }
 
-
 export async function uploadAvatar(token: string | null, data: FormData) {
   const url = `${apiUri}/api/users/avatar/upload/`;
 
@@ -372,7 +371,7 @@ export function useNotices(token: string | null) {
   };
 }
 
-export async function updateViewed(token:string | null, notice_id: string) {
+export async function updateViewed(token: string | null, notice_id: string) {
   const url = `${apiUri}/api/buslists/notices/${notice_id}/viewed/`;
 
   interface IResponse {
@@ -380,11 +379,15 @@ export async function updateViewed(token:string | null, notice_id: string) {
   }
 
   try {
-    const res = await axios.patch<IResponse>(url, {}, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await axios.patch<IResponse>(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

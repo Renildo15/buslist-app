@@ -11,7 +11,7 @@ interface IButtonAvatarSaveProps {
 export default function ButtonAvatarSave({
   onPress,
   isLoading,
-  label="Atualizar avatar",
+  label = 'Atualizar avatar',
 }: IButtonAvatarSaveProps) {
   return (
     <View style={styles.box_update_avatar}>

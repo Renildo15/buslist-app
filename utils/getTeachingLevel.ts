@@ -21,7 +21,6 @@ export function getTeachingLevel(teachingLevel: string | undefined) {
   }
 }
 
-
 export function getTeachingLevelKey(teachingLevelName: string | undefined) {
   switch (teachingLevelName) {
     case 'Graduação':

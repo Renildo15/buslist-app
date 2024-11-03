@@ -75,50 +75,62 @@ export default function AvatarUser() {
     <ImagePattern>
       <View style={styles_avatar.container}>
         <Text style={styles.header_text}>Adicionar foto de perfil</Text>
-        <View style={[styles.avatar_container, {backgroundColor: 'rgba(240, 240, 240, 0.8)'}]}>
-            <TouchableOpacity
-              style={styles.camera_icon}
-              onPress={handleSelectImage}
-            >
-              <Avatar
-                height={300}
-                width={300}
-                borderRadius={50}
-                uri={avatarUri ?? ''}
-              />
-              <Feather
-                name="camera"
-                size={80}
-                color="#007bff"
-                style={styles.camera_icon_position}
-              />
-            </TouchableOpacity>
-          </View>
+        <View
+          style={[
+            styles.avatar_container,
+            { backgroundColor: 'rgba(240, 240, 240, 0.8)' },
+          ]}
+        >
+          <TouchableOpacity
+            style={styles.camera_icon}
+            onPress={handleSelectImage}
+          >
+            <Avatar
+              height={300}
+              width={300}
+              borderRadius={50}
+              uri={avatarUri ?? ''}
+            />
+            <Feather
+              name="camera"
+              size={80}
+              color="#007bff"
+              style={styles.camera_icon_position}
+            />
+          </TouchableOpacity>
+        </View>
         <View style={styles_avatar.box_buttons}>
           {showButtonAvatar && (
-            <ButtonAvatarSave onPress={handleUploadAvatar} isLoading={isLoading} />
+            <ButtonAvatarSave
+              onPress={handleUploadAvatar}
+              isLoading={isLoading}
+            />
           )}
-         <ButtonAvatarSave onPress={() => {router.replace('/(app)/')}} label='Pular' />
+          <ButtonAvatarSave
+            onPress={() => {
+              router.replace('/(app)/');
+            }}
+            label="Pular"
+          />
         </View>
       </View>
     </ImagePattern>
   );
 }
 
-
 const styles_avatar = StyleSheet.create({
   container: {
-    flex:1, 
-    alignItems:'center', 
-    justifyContent:'center', 
-    backgroundColor: 'rgba(240, 240, 240, 0.8)', 
-    gap:4
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(240, 240, 240, 0.8)',
+    gap: 4,
   },
   box_buttons: {
-    flexDirection:'row', 
-    gap:4,
-    alignItems:'center', 
-    justifyContent:'center', 
-    backgroundColor: 'rgba(240, 240, 240, 0.8)'
-  }
-})
+    flexDirection: 'row',
+    gap: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(240, 240, 240, 0.8)',
+  },
+});

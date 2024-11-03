@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ImagePattern from '@/components/auth/image-pattern';
-import { View,Text } from '@/components/Themed';
+import { View, Text } from '@/components/Themed';
 import { StyleSheet, Image, ActivityIndicator } from 'react-native';
 import Input from '@/components/auth/input';
 import AuthButton from '@/components/auth/auth-button';
@@ -11,7 +11,10 @@ import { Redirect } from 'expo-router';
 import SelectBusStop from '@/components/profile/update-student/select-bus-stop';
 import { createStudent, useBusStops, useWhoAmI } from '@/api/api';
 import { IBusStop } from '@/api/interfaces/busstop';
-import { IUserStudentProfileCreate, IUserStudentProfileUpdate } from '@/api/interfaces/user';
+import {
+  IUserStudentProfileCreate,
+  IUserStudentProfileUpdate,
+} from '@/api/interfaces/user';
 import Toast from 'react-native-toast-message';
 import { TeachingLevelEnum } from '@/api/enums/user';
 import { router } from 'expo-router';
@@ -19,7 +22,7 @@ import { router } from 'expo-router';
 export default function Profile() {
   const { whoAmI, session, student } = useSession();
   const { mutate: userMutate } = useWhoAmI(session ?? '');
- 
+
   const currentUser = whoAmI();
   const { data: busStops } = useBusStops(session ?? '');
   const [whatsapp, setWhatsapp] = useState('');
@@ -29,7 +32,7 @@ export default function Profile() {
   const [errors, setErrors] = useState({
     whatsapp: '',
     busStop: '',
-  })
+  });
 
   const validateForm = () => {
     const newErrors = {
@@ -47,27 +50,25 @@ export default function Profile() {
   };
 
   const handleSave = async () => {
-
     if (!validateForm()) return;
 
     try {
       setIsLoading(true);
       const data: IUserStudentProfileCreate = {
-        user:currentUser?.id ?? '',
+        user: currentUser?.id ?? '',
         bus_stop: busStopId,
         phone_number: whatsapp,
         course_name: student.course_student,
         matric_number: student.matriculation_student,
         sex: student.sex_student,
         status: student.status_student,
-        teaching_level: getTeachingLevelKey(student.teaching_level_student) as TeachingLevelEnum,
+        teaching_level: getTeachingLevelKey(
+          student.teaching_level_student
+        ) as TeachingLevelEnum,
         institution: student.institution_student,
       };
-      
-      const response = await createStudent(
-        session ?? '',
-        data
-      );
+
+      const response = await createStudent(session ?? '', data);
 
       if (response) {
         userMutate();
@@ -87,7 +88,7 @@ export default function Profile() {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const handleTextChange = (text: string) => {
     // Remove todos os caracteres que não sejam dígitos
@@ -95,9 +96,15 @@ export default function Profile() {
 
     // Adiciona a formatação para (xx) xxxx-xxxx ou (xx) xxxxx-xxxx
     if (formattedText.length <= 10) {
-      formattedText = formattedText.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
+      formattedText = formattedText.replace(
+        /^(\d{2})(\d{4})(\d{0,4})$/,
+        '($1) $2-$3'
+      );
     } else {
-      formattedText = formattedText.replace(/^(\d{2})(\d{5})(\d{0,4})$/, '($1) $2-$3');
+      formattedText = formattedText.replace(
+        /^(\d{2})(\d{5})(\d{0,4})$/,
+        '($1) $2-$3'
+      );
     }
 
     setWhatsapp(formattedText);
@@ -126,7 +133,7 @@ export default function Profile() {
           />
         </View>
 
-       <View style={{ backgroundColor: 'transparent' }}>
+        <View style={{ backgroundColor: 'transparent' }}>
           <AuthErrors error={errors.busStop} />
           <SelectBusStop
             data={busStops?.bus_stop ?? []}
