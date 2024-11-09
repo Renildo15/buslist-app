@@ -60,6 +60,16 @@ export const styles = StyleSheet.create({
   section_title: {
     fontSize: 16,
     fontWeight: 'bold',
-  }
+  },
+
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    paddingHorizontal: 8,
+    borderRadius: 8,
+  },
 
 });
