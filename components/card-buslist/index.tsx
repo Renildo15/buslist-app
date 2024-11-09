@@ -56,8 +56,8 @@ export default function CardBuslist({ buslist }: CardBuslistProps) {
           </Text>
         </View>
         <View style={{ gap: 4 }}>
-          <TouchableOpacity 
-            activeOpacity={0.8} 
+          <TouchableOpacity
+            activeOpacity={0.8}
             style={styles.button_entry}
             onPress={() => setIsVisibleModal(true)}
           >
@@ -72,15 +72,14 @@ export default function CardBuslist({ buslist }: CardBuslistProps) {
         <Feather name="users" size={16} color="black" />
         <Text>25 pessoas</Text>
       </View>
-      
-      { isVisibleModal && (
-        <ModalAddBuslist 
-          modalVisible={isVisibleModal}    
+
+      {isVisibleModal && (
+        <ModalAddBuslist
+          modalVisible={isVisibleModal}
           setModalVisible={setIsVisibleModal}
           buslistId={buslist.id}
         />
       )}
-
     </View>
   );
 }

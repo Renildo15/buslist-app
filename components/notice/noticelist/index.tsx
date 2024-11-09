@@ -1,5 +1,12 @@
 import { View, Text } from '@/components/Themed';
-import { Animated, Easing, FlatList, ListRenderItem, RefreshControl, SectionListData } from 'react-native';
+import {
+  Animated,
+  Easing,
+  FlatList,
+  ListRenderItem,
+  RefreshControl,
+  SectionListData,
+} from 'react-native';
 import { styles } from './styles';
 import { useSession } from '@/context/AuthContext';
 import { useNotices } from '@/api/api';
@@ -9,8 +16,14 @@ import CardNotice from '../card-notice';
 import { JSX, useCallback, useMemo, useRef, useState } from 'react';
 import NoticeSkeleton from '../skeleton';
 import ButtonIcon from '@/components/button-icon';
-import { GestureHandlerRootView, TextInput } from 'react-native-gesture-handler';
-import BottomSheet, { BottomSheetBackdrop, BottomSheetSectionList } from '@gorhom/bottom-sheet';
+import {
+  GestureHandlerRootView,
+  TextInput,
+} from 'react-native-gesture-handler';
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetSectionList,
+} from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { RadioButton } from 'react-native-paper';
 import { NoticeType, optionsFilters } from '@/utils/data';
@@ -26,9 +39,9 @@ export default function NoticeList() {
 
   const [searchVisible, setSearchVisible] = useState(false);
   const animationValue = useRef(new Animated.Value(0)).current;
-  
+
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["25%", "50%", "75%"], []);
+  const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
 
   const toggleSearchBar = () => {
     if (searchVisible) {
@@ -76,7 +89,11 @@ export default function NoticeList() {
 
   const renderBackdrop = useCallback(
     (props: JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps) => (
-      <BottomSheetBackdrop {...props} disappearsOnIndex={1} appearsOnIndex={2} />
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={1}
+        appearsOnIndex={2}
+      />
     ),
     []
   );
@@ -100,8 +117,8 @@ export default function NoticeList() {
             setSelectedId(item.id);
             setSelectedFilter(item.is_filtereded ?? null);
           }}
-          uncheckedColor='white'
-          color='white'
+          uncheckedColor="white"
+          color="white"
         />
         <Text style={{ color: 'white' }}>{item.type}</Text>
       </View>
@@ -117,19 +134,27 @@ export default function NoticeList() {
       <View style={styles.header_list}>
         <Text style={styles.header_text}>Avisos</Text>
         {searchVisible ? (
-        <Animated.View style={[styles.searchContainer, { width: searchBarWidth }]}>
-          <SearchBar
-            value={searchText}
-            onChangeText={setSearchText}
-            onClose={toggleSearchBar}
-          />
-        </Animated.View>
-      ) : (
-        <View style={{ flexDirection: "row", gap: 4 }}>
-          <ButtonIcon name="search" size={24} onPress={toggleSearchBar} />
-          <ButtonIcon name="filter" size={24} onPress={() => { bottomSheetRef.current?.expand() }} />
-        </View>
-      )}
+          <Animated.View
+            style={[styles.searchContainer, { width: searchBarWidth }]}
+          >
+            <SearchBar
+              value={searchText}
+              onChangeText={setSearchText}
+              onClose={toggleSearchBar}
+            />
+          </Animated.View>
+        ) : (
+          <View style={{ flexDirection: 'row', gap: 4 }}>
+            <ButtonIcon name="search" size={24} onPress={toggleSearchBar} />
+            <ButtonIcon
+              name="filter"
+              size={24}
+              onPress={() => {
+                bottomSheetRef.current?.expand();
+              }}
+            />
+          </View>
+        )}
       </View>
 
       {errorNotices ? (
@@ -146,7 +171,11 @@ export default function NoticeList() {
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           ListEmptyComponent={() => <Empty message="Nenhum aviso encontrada" />}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#007bff']} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={['#007bff']}
+            />
           }
         />
       )}

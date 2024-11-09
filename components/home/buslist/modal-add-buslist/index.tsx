@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, View, Text, Platform } from 'react-native';
 import { styles } from './styles';
-import BouncyCheckbox from "react-native-bouncy-checkbox";
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { useSession } from '@/context/AuthContext';
@@ -21,7 +21,6 @@ export default function ModalAddBuslist({
   const [endTime, setEndTime] = useState<Date | undefined>(new Date());
   const [isReturn, setIsReturn] = useState(true);
   const [showTimePicker, setShowTimePicker] = useState(false);
-  
 
   const handleTimeChange = (event: any, selectedDate?: Date) => {
     setShowTimePicker(Platform.OS === 'ios');
@@ -41,12 +40,12 @@ export default function ModalAddBuslist({
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <View style={{width:'100%'}}>
-          <Button
+          <View style={{ width: '100%' }}>
+            <Button
               title="Selecione o horário"
               onPress={() => setShowTimePicker(true)}
               color="#007bff"
-              width='100%'
+              width="100%"
             />
             {showTimePicker && (
               <DateTimePicker
@@ -61,31 +60,37 @@ export default function ModalAddBuslist({
               <Text>Horário selecionado: {endTime.toLocaleTimeString()}</Text>
             )}
             <BouncyCheckbox
-                isChecked={isReturn}
-                fillColor="#007bff"
-                size={25}
-                useBuiltInState={false}
-                onPress={(checked: boolean) => {
-                    setIsReturn(!isReturn);
-                }}
-                textComponent= {
-                    <Text style={{marginLeft:6}}>Volta</Text>
-                }
+              isChecked={isReturn}
+              fillColor="#007bff"
+              size={25}
+              useBuiltInState={false}
+              onPress={(checked: boolean) => {
+                setIsReturn(!isReturn);
+              }}
+              textComponent={<Text style={{ marginLeft: 6 }}>Volta</Text>}
             />
           </View>
-          <View style={{flexDirection:'row', justifyContent:"space-between", gap:6, width:"100%", marginTop:16}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              gap: 6,
+              width: '100%',
+              marginTop: 16,
+            }}
+          >
             <Button
-                title='Cancelar'
-                onPress={() => setModalVisible(false)}
-                style={{marginRight: 10}}
-                color='red'
-                width='40%'
+              title="Cancelar"
+              onPress={() => setModalVisible(false)}
+              style={{ marginRight: 10 }}
+              color="red"
+              width="40%"
             />
             <Button
-                title='Salvar'
-                onPress={() => console.log('Salvar')}
-                color='#007bff'
-                width='40%'
+              title="Salvar"
+              onPress={() => console.log('Salvar')}
+              color="#007bff"
+              width="40%"
             />
           </View>
         </View>

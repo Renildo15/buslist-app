@@ -42,19 +42,19 @@ export const styles = StyleSheet.create({
   },
 
   contentContainer: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     padding: 6,
   },
   sectionHeaderContainer: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     padding: 6,
   },
   itemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 6,
     margin: 6,
-    backgroundColor: "#007bff",
+    backgroundColor: '#007bff',
   },
 
   section_title: {
@@ -71,5 +71,4 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 8,
     borderRadius: 8,
   },
-
 });
