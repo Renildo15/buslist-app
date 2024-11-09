@@ -1,18 +1,27 @@
-import { TouchableOpacity, View } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 import { Text } from '../Themed';
 import { styles } from './styles';
 import { Feather } from '@expo/vector-icons';
 import { IBusList } from '@/api/interfaces/buslist';
 import { getShiftName } from '@/utils';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ModalAddBuslist from '../home/buslist/modal-add-buslist';
+import { useSession } from '@/context/AuthContext';
+import { Button } from '../button';
+import Toast from 'react-native-toast-message';
+import { deleteBuslistStudent } from '@/api/api';
 
 interface CardBuslistProps {
   buslist: IBusList;
+  mutate: () => void;
 }
 
-export default function CardBuslist({ buslist }: CardBuslistProps) {
+export default function CardBuslist({ buslist, mutate }: CardBuslistProps) {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [students, setStudents] = useState(buslist.students);
+  const { whoAmI, session } = useSession();
+
   function formatDate(date: string) {
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
@@ -27,6 +36,45 @@ export default function CardBuslist({ buslist }: CardBuslistProps) {
     return time;
   }
 
+  const currentUser = whoAmI();
+
+  const isStudentInBuslist = students.some(
+    (student) => student.username === currentUser?.username
+  );
+
+  useEffect(() => {
+    setStudents(buslist.students);
+  }, [buslist]);
+
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+      await deleteBuslistStudent(session ?? "", currentUser?.id ?? "", buslist.id);
+      mutate();
+      Toast.show({
+        type: 'success',
+        text1: 'Sucesso',
+        text2: 'Removido da lista',
+      });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Erro',
+        text2: 'Erro ao remover da lista',
+      });
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleAddAndRemove = () => {
+    if (isStudentInBuslist) {
+      handleDelete();
+    } else {
+      setIsVisibleModal(true)
+    }
+  }
+  
   return (
     <View style={styles.card_buslist}>
       <View style={styles.status_content}>
@@ -56,16 +104,25 @@ export default function CardBuslist({ buslist }: CardBuslistProps) {
           </Text>
         </View>
         <View style={{ gap: 4 }}>
-          <TouchableOpacity
+         
+          { loading ? (
+            <ActivityIndicator size="small" color="#007bff" />
+          ) : (
+            <Button
+              title={isStudentInBuslist ? 'Remover' : 'Add'}
+              color={isStudentInBuslist ? 'red' : 'green'}
+              onPress={handleAddAndRemove}
+              activeOpacity={0.8}
+            />
+            )  
+          }
+
+          <Button
+            title='Ver lista'
+            color='#007bff'
+            onPress={() => {}}
             activeOpacity={0.8}
-            style={styles.button_entry}
-            onPress={() => setIsVisibleModal(true)}
-          >
-            <Text style={{ color: 'white' }}>Add</Text>
-          </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.8} style={styles.button_view_list}>
-            <Text style={{ color: 'white' }}>Ver lista</Text>
-          </TouchableOpacity>
+          />
         </View>
       </View>
       <View style={{ flexDirection: 'row', gap: 3, alignItems: 'center' }}>
@@ -78,6 +135,7 @@ export default function CardBuslist({ buslist }: CardBuslistProps) {
           modalVisible={isVisibleModal}
           setModalVisible={setIsVisibleModal}
           buslistId={buslist.id}
+          mutate={mutate}
         />
       )}
     </View>

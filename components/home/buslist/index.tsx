@@ -13,7 +13,7 @@ export function Buslist() {
   const date = new Date();
   const today = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 
-  const { data: buslist, error: errorBuslist } = useBuslistToday(
+  const { data: buslist, error: errorBuslist, mutate: mutateBusList } = useBuslistToday(
     session ?? null,
     dateToday
   );
@@ -32,7 +32,7 @@ export function Buslist() {
         style={{ width: '100%' }}
         contentContainerStyle={{ flex: 1 }}
         data={buslist?.results ?? []}
-        renderItem={({ item }) => <CardBuslist buslist={item} />}
+        renderItem={({ item }) => <CardBuslist buslist={item} mutate={mutateBusList} />}
         keyExtractor={(item) => item.id.toString()}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListEmptyComponent={() => <Empty message="Nenhuma lista encontrada" />}
