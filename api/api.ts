@@ -347,8 +347,12 @@ export function useBusStops(token: string | null) {
   };
 }
 
-export function useNotices(token: string | null) {
-  const url = `${apiUri}/api/buslists/notices/`;
+export function useNotices(token: string | null, filter: boolean | null) {
+  let url = `${apiUri}/api/buslists/notices/`;
+  if (filter !== null && filter !== undefined) {
+  url += `?viewed=${filter ? 'true' : 'false'}`;
+}
+
 
   interface IResponse {
     count: number;
