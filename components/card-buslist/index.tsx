@@ -127,7 +127,7 @@ export default function CardBuslist({ buslist, mutate }: CardBuslistProps) {
       </View>
       <View style={{ flexDirection: 'row', gap: 3, alignItems: 'center' }}>
         <Feather name="users" size={16} color="black" />
-        <Text>25 pessoas</Text>
+        <Text>{students.length} {students.length > 1 ? 'pessoas': 'pessoa'}</Text>
       </View>
 
       {isVisibleModal && (
