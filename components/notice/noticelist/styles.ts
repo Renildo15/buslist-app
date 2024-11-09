@@ -40,4 +40,26 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white',
     elevation: 5,
   },
+
+  contentContainer: {
+    backgroundColor: "white",
+    padding: 6,
+  },
+  sectionHeaderContainer: {
+    backgroundColor: "white",
+    padding: 6,
+  },
+  itemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 6,
+    margin: 6,
+    backgroundColor: "#007bff",
+  },
+
+  section_title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  }
+
 });
