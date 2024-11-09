@@ -13,7 +13,6 @@ export interface IUser {
 }
 
 export interface IUserStudentProfile {
-  id: string;
   avatar: string;
   institution: string;
   phone_number: string;

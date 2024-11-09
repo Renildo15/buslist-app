@@ -10,7 +10,7 @@ import {
   IUserStudentProfileCreate,
   IUserStudentProfileUpdate,
 } from './interfaces/user';
-import { IBusList } from './interfaces/buslist';
+import { IBusList, IBusListStudentCreate } from './interfaces/buslist';
 import { IBusStop } from './interfaces/busstop';
 import { INotice } from './interfaces/notice';
 
@@ -402,6 +402,73 @@ export async function updateViewed(token: string | null, notice_id: string) {
         },
       }
     );
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.debug('Axios error message:', error.message);
+      if (error.response) {
+        console.debug('Response data:', error.response.data);
+        console.debug('Response status:', error.response.status);
+        console.debug('Response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('Request data:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    throw error;
+  }
+}
+
+
+export async function createBuslistStudent(token: string | null, data: IBusListStudentCreate, studentID: string, buslistID: string) {
+  const url = `${apiUri}/api/buslists/student/create/${buslistID}/${studentID}/`;
+
+  interface IResponse {
+    message: string;
+  }
+
+  try {
+    const res = await axios.post<IResponse>(url, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.debug('Axios error message:', error.message);
+      if (error.response) {
+        console.debug('Response data:', error.response.data);
+        console.debug('Response status:', error.response.status);
+        console.debug('Response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('Request data:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    throw error;
+  }
+}
+
+export async function deleteBuslistStudent(token: string | null,studentID: string, buslistID: string) {
+  const url = `${apiUri}/api/buslists/student/remove/${buslistID}/${studentID}/`;
+
+  interface IResponse {
+    message: string;
+  }
+
+  try {
+    const res = await axios.delete<IResponse>(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return res.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
