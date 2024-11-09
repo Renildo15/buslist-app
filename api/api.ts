@@ -347,7 +347,7 @@ export function useBusStops(token: string | null) {
   };
 }
 
-export function useNotices(token: string | null, filter: boolean | null, search?: string) {
+export function useNotices(token: string | null, filter?: boolean | null, search?: string) {
   let url = `${apiUri}/api/buslists/notices/`;
   if (filter !== null && filter !== undefined) {
     url += `?viewed=${filter ? 'true' : 'false'}`;
