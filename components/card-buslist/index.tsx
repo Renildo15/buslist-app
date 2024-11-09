@@ -4,12 +4,15 @@ import { styles } from './styles';
 import { Feather } from '@expo/vector-icons';
 import { IBusList } from '@/api/interfaces/buslist';
 import { getShiftName } from '@/utils';
+import { useState } from 'react';
+import ModalAddBuslist from '../home/buslist/modal-add-buslist';
 
 interface CardBuslistProps {
   buslist: IBusList;
 }
 
 export default function CardBuslist({ buslist }: CardBuslistProps) {
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
   function formatDate(date: string) {
     const [year, month, day] = date.split('-');
     return `${day}/${month}/${year}`;
@@ -53,7 +56,11 @@ export default function CardBuslist({ buslist }: CardBuslistProps) {
           </Text>
         </View>
         <View style={{ gap: 4 }}>
-          <TouchableOpacity activeOpacity={0.8} style={styles.button_entry}>
+          <TouchableOpacity 
+            activeOpacity={0.8} 
+            style={styles.button_entry}
+            onPress={() => setIsVisibleModal(true)}
+          >
             <Text style={{ color: 'white' }}>Add</Text>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.8} style={styles.button_view_list}>
@@ -65,6 +72,15 @@ export default function CardBuslist({ buslist }: CardBuslistProps) {
         <Feather name="users" size={16} color="black" />
         <Text>25 pessoas</Text>
       </View>
+      
+      { isVisibleModal && (
+        <ModalAddBuslist 
+          modalVisible={isVisibleModal}    
+          setModalVisible={setIsVisibleModal}
+          buslistId={buslist.id}
+        />
+      )}
+
     </View>
   );
 }
