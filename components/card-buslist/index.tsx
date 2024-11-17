@@ -3,13 +3,14 @@ import { Text } from '../Themed';
 import { styles } from './styles';
 import { Feather } from '@expo/vector-icons';
 import { IBusList } from '@/api/interfaces/buslist';
-import { getShiftName } from '@/utils';
+import { formatDate, getShiftName } from '@/utils';
 import { useState, useEffect } from 'react';
 import ModalAddBuslist from '../home/buslist/modal-add-buslist';
 import { useSession } from '@/context/AuthContext';
 import { Button } from '../button';
 import Toast from 'react-native-toast-message';
 import { deleteBuslistStudent } from '@/api/api';
+import { router } from 'expo-router';
 
 interface CardBuslistProps {
   buslist: IBusList;
@@ -21,11 +22,6 @@ export default function CardBuslist({ buslist, mutate }: CardBuslistProps) {
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState(buslist.students);
   const { whoAmI, session } = useSession();
-
-  function formatDate(date: string) {
-    const [year, month, day] = date.split('-');
-    return `${day}/${month}/${year}`;
-  }
 
   function formatTime(dateString: string): string {
     const time = new Date(dateString).toLocaleTimeString('pt-BR', {
@@ -120,7 +116,7 @@ export default function CardBuslist({ buslist, mutate }: CardBuslistProps) {
           <Button
             title='Ver lista'
             color='#007bff'
-            onPress={() => {}}
+            onPress={() => {router.push(`/(app)/(tabs)/(home)/${buslist.id}/buslist-detail`)}}
             activeOpacity={0.8}
           />
         </View>

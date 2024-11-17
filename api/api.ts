@@ -10,7 +10,7 @@ import {
   IUserStudentProfileCreate,
   IUserStudentProfileUpdate,
 } from './interfaces/user';
-import { IBusList, IBusListStudentCreate } from './interfaces/buslist';
+import { IBusList, IBusListStudent, IBusListStudentCreate, IBusListWithoutStudents } from './interfaces/buslist';
 import { IBusStop } from './interfaces/busstop';
 import { INotice } from './interfaces/notice';
 
@@ -310,6 +310,28 @@ export function useBuslistToday(token: string | null, date: string) {
     next: string | null;
     previous: string | null;
     results: IBusList[];
+  }
+
+  const { data, error, isLoading, isValidating, mutate } = useSWR<IResponse>(
+    [url],
+    () => fetcher(url, token)
+  );
+
+  return {
+    data,
+    error,
+    isLoading,
+    isValidating,
+    mutate,
+  };
+}
+
+export function useBuslist(token: string | null, buslistID: string) {
+  const url = `${apiUri}/api/buslists/students/${buslistID}/`;
+
+  interface IResponse {
+    buslist: IBusListWithoutStudents,
+    students : IBusListStudent[]
   }
 
   const { data, error, isLoading, isValidating, mutate } = useSWR<IResponse>(

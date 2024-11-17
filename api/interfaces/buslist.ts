@@ -19,3 +19,18 @@ export interface IBusListStudentCreate {
   end_class_time: string;
   is_return: boolean;
 }
+export interface IBusListStudent {
+  id: string
+  end_class_time: string
+  is_return: boolean
+  student: IUserStudent
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IBusListWithoutStudents {
+  id: string;
+  name: string;
+  list_date: string;
+  is_enable: boolean;
+}

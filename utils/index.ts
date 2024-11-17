@@ -1,6 +1,6 @@
 import { splitName } from './splitName';
 import { validateField } from './validateField';
-import { formattedDate } from './formattedDate';
+import { formattedDate, formatDate } from './formattedDate';
 import { getShiftName } from './getShiftName';
 import { getTeachingLevel, getTeachingLevelKey } from './getTeachingLevel';
 
@@ -11,4 +11,5 @@ export {
   getShiftName,
   getTeachingLevel,
   getTeachingLevelKey,
+  formatDate
 };
