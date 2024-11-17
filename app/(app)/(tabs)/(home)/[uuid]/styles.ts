@@ -9,13 +9,12 @@ const styles = StyleSheet.create({
     padding: 16,
   },
 
-  header_list:{
+  header_list: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: 10
-  }
- 
+    gap: 10,
+  },
 });
 
-export default styles
+export default styles;

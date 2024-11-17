@@ -32,20 +32,27 @@ export default function ModalAddBuslist({
   const currentUser = whoAmI();
 
   const formattedTime = endTime
-  ? endTime.toLocaleTimeString('pt-BR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })
-  : '00:00:00';
-
+    ? endTime.toLocaleTimeString('pt-BR', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      })
+    : '00:00:00';
 
   const handleSave = async () => {
-   
     setLoading(true);
     try {
-
       const data = {
         end_class_time: formattedTime,
         is_return: isReturn,
-      }
-      const response = await createBuslistStudent(session ?? "", data, currentUser?.id ?? "", buslistId);
+      };
+      const response = await createBuslistStudent(
+        session ?? '',
+        data,
+        currentUser?.id ?? '',
+        buslistId
+      );
 
       if (response) {
         Toast.show({
@@ -66,8 +73,7 @@ export default function ModalAddBuslist({
       setLoading(false);
       setModalVisible(false);
     }
-
-  }
+  };
 
   const handleTimeChange = (event: any, selectedDate?: Date) => {
     setShowTimePicker(Platform.OS === 'ios');
@@ -133,7 +139,7 @@ export default function ModalAddBuslist({
               color="red"
               width="40%"
             />
-           {loading ? (
+            {loading ? (
               <ActivityIndicator size="large" color="#007bff" />
             ) : (
               <Button

@@ -10,7 +10,12 @@ import {
   IUserStudentProfileCreate,
   IUserStudentProfileUpdate,
 } from './interfaces/user';
-import { IBusList, IBusListStudent, IBusListStudentCreate, IBusListWithoutStudents } from './interfaces/buslist';
+import {
+  IBusList,
+  IBusListStudent,
+  IBusListStudentCreate,
+  IBusListWithoutStudents,
+} from './interfaces/buslist';
 import { IBusStop } from './interfaces/busstop';
 import { INotice } from './interfaces/notice';
 
@@ -330,8 +335,8 @@ export function useBuslist(token: string | null, buslistID: string) {
   const url = `${apiUri}/api/buslists/students/${buslistID}/`;
 
   interface IResponse {
-    buslist: IBusListWithoutStudents,
-    students : IBusListStudent[]
+    buslist: IBusListWithoutStudents;
+    students: IBusListStudent[];
   }
 
   const { data, error, isLoading, isValidating, mutate } = useSWR<IResponse>(
@@ -444,8 +449,12 @@ export async function updateViewed(token: string | null, notice_id: string) {
   }
 }
 
-
-export async function createBuslistStudent(token: string | null, data: IBusListStudentCreate, studentID: string, buslistID: string) {
+export async function createBuslistStudent(
+  token: string | null,
+  data: IBusListStudentCreate,
+  studentID: string,
+  buslistID: string
+) {
   const url = `${apiUri}/api/buslists/student/create/${buslistID}/${studentID}/`;
 
   interface IResponse {
@@ -478,7 +487,11 @@ export async function createBuslistStudent(token: string | null, data: IBusListS
   }
 }
 
-export async function deleteBuslistStudent(token: string | null,studentID: string, buslistID: string) {
+export async function deleteBuslistStudent(
+  token: string | null,
+  studentID: string,
+  buslistID: string
+) {
   const url = `${apiUri}/api/buslists/student/remove/${buslistID}/${studentID}/`;
 
   interface IResponse {

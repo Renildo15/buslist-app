@@ -45,7 +45,11 @@ export default function CardBuslist({ buslist, mutate }: CardBuslistProps) {
   const handleDelete = async () => {
     try {
       setLoading(true);
-      await deleteBuslistStudent(session ?? "", currentUser?.id ?? "", buslist.id);
+      await deleteBuslistStudent(
+        session ?? '',
+        currentUser?.id ?? '',
+        buslist.id
+      );
       mutate();
       Toast.show({
         type: 'success',
@@ -59,18 +63,18 @@ export default function CardBuslist({ buslist, mutate }: CardBuslistProps) {
         text2: 'Erro ao remover da lista',
       });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleAddAndRemove = () => {
     if (isStudentInBuslist) {
       handleDelete();
     } else {
-      setIsVisibleModal(true)
+      setIsVisibleModal(true);
     }
-  }
-  
+  };
+
   return (
     <View style={styles.card_buslist}>
       <View style={styles.status_content}>
@@ -100,8 +104,7 @@ export default function CardBuslist({ buslist, mutate }: CardBuslistProps) {
           </Text>
         </View>
         <View style={{ gap: 4 }}>
-         
-          { loading ? (
+          {loading ? (
             <ActivityIndicator size="small" color="#007bff" />
           ) : (
             <Button
@@ -110,20 +113,23 @@ export default function CardBuslist({ buslist, mutate }: CardBuslistProps) {
               onPress={handleAddAndRemove}
               activeOpacity={0.8}
             />
-            )  
-          }
+          )}
 
           <Button
-            title='Ver lista'
-            color='#007bff'
-            onPress={() => {router.push(`/(app)/(tabs)/(home)/${buslist.id}/buslist-detail`)}}
+            title="Ver lista"
+            color="#007bff"
+            onPress={() => {
+              router.push(`/(app)/(tabs)/(home)/${buslist.id}/buslist-detail`);
+            }}
             activeOpacity={0.8}
           />
         </View>
       </View>
       <View style={{ flexDirection: 'row', gap: 3, alignItems: 'center' }}>
         <Feather name="users" size={16} color="black" />
-        <Text>{students.length} {students.length > 1 ? 'pessoas': 'pessoa'}</Text>
+        <Text>
+          {students.length} {students.length > 1 ? 'pessoas' : 'pessoa'}
+        </Text>
       </View>
 
       {isVisibleModal && (

@@ -1,17 +1,14 @@
-import { useBuslist } from "@/api/api";
-import DefaultLayout from "@/components/defaul-layout";
+import { useBuslist } from '@/api/api';
+import DefaultLayout from '@/components/defaul-layout';
 import { useLocalSearchParams } from 'expo-router';
-import StudentsList from "@/components/home/buslist/students-list";
+import StudentsList from '@/components/home/buslist/students-list';
 
 export default function BuslistDetail() {
-    const { uuid } = useLocalSearchParams();
+  const { uuid } = useLocalSearchParams();
 
-    return (
-        <DefaultLayout>
-            <StudentsList
-                buslistUuid={uuid as string}
-            />
-        </DefaultLayout>
-    );
-    
+  return (
+    <DefaultLayout>
+      <StudentsList buslistUuid={uuid as string} />
+    </DefaultLayout>
+  );
 }

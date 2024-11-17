@@ -11,5 +11,5 @@ export {
   getShiftName,
   getTeachingLevel,
   getTeachingLevelKey,
-  formatDate
+  formatDate,
 };

@@ -10,7 +10,7 @@ export interface IBusList {
   shift: ShiftEnum;
   type_creation: string;
   is_enable: boolean;
-  students: IUserStudent[]
+  students: IUserStudent[];
   created_at: string;
   updated_at: string;
 }
@@ -20,10 +20,10 @@ export interface IBusListStudentCreate {
   is_return: boolean;
 }
 export interface IBusListStudent {
-  id: string
-  end_class_time: string
-  is_return: boolean
-  student: IUserStudent
+  id: string;
+  end_class_time: string;
+  is_return: boolean;
+  student: IUserStudent;
   created_at: string;
   updated_at: string;
 }
