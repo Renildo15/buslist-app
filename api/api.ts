@@ -523,3 +523,53 @@ export async function deleteBuslistStudent(
     throw error;
   }
 }
+
+export function useBuslistStudent(token: string | null, buslistStudentID: string) {
+  const url = `${apiUri}/api/buslists/student/detail/${buslistStudentID}/`;
+
+  const { data, error, isLoading, isValidating, mutate } = useSWR<IBusListStudent>(
+    [url],
+    () => fetcher(url, token)
+  );
+
+  return {
+    data,
+    error,
+    isLoading,
+    isValidating,
+    mutate,
+  };
+}
+
+export async function updateBuslistStudent(token: string, buslistStudentID: string, data: IBusListStudentCreate) {
+  const url = `${apiUri}/api/buslists/students/update/${buslistStudentID}/`;
+
+  interface IResponse {
+    message: string;
+  }
+
+  try {
+    const res = await axios.patch<IResponse>(url, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.debug('Axios error message:', error.message);
+      if (error.response) {
+        console.debug('Response data:', error.response.data);
+        console.debug('Response status:', error.response.status);
+        console.debug('Response headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('Request data:', error.request);
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
+    } else {
+      console.error('Unexpected error:', error);
+    }
+    throw error;
+  }
+}

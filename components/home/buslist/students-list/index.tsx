@@ -13,8 +13,10 @@ interface IStudentsListProps {
 }
 
 export default function StudentsList({ buslistUuid }: IStudentsListProps) {
-  const { session } = useSession();
+  const { session, whoAmI } = useSession();
   const [refreshing, setRefreshing] = useState(false);
+
+  const currentUser = whoAmI();
 
   const {
     data: buslist,
@@ -28,6 +30,7 @@ export default function StudentsList({ buslistUuid }: IStudentsListProps) {
     await mutateBuslist();
     setRefreshing(false);
   };
+
 
   return (
     <View style={styles.container}>
@@ -45,9 +48,12 @@ export default function StudentsList({ buslistUuid }: IStudentsListProps) {
         renderItem={({ item }) => (
           <CardStudent
             key={item.id}
+            buslistStudentId={item.id}
             student={item.student}
             end_class_time={item.end_class_time}
             is_return={item.is_return}
+            currentUserId={currentUser?.id ?? ""}
+            mutate={mutateBuslist}
           />
         )}
         ListEmptyComponent={() => <Empty message="Nenhum aviso encontrada" />}

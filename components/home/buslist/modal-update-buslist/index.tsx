@@ -1,35 +1,71 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, View, Text, Platform, ActivityIndicator } from 'react-native';
-import { styles } from './styles';
+import { styles } from '../modal-add-buslist/styles';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
 
 import { useSession } from '@/context/AuthContext';
 import { Button } from '@/components/button';
-import { createBuslistStudent } from '@/api/api';
+import { updateBuslistStudent, useBuslistStudent } from '@/api/api';
 
-interface IModalAddBuslistProps {
+interface IModalUpdateBuslistProps {
   modalVisible: boolean;
   setModalVisible: (modalVisible: boolean) => void;
-  buslistId: string;
+  buslistStudentId: string;
   mutate: () => void;
 }
 
-export default function ModalAddBuslist({
+interface OriginalDataProps {
+    end_class_time: string | Date;
+    is_return: boolean | null;
+}
+
+export default function ModalUpdateBuslist({
   modalVisible,
   setModalVisible,
-  buslistId,
+  buslistStudentId,
   mutate,
-}: IModalAddBuslistProps) {
+}: IModalUpdateBuslistProps) {
   const { session, whoAmI } = useSession();
   const [endTime, setEndTime] = useState<Date | undefined>(new Date());
   const [isReturn, setIsReturn] = useState(true);
   const [showTimePicker, setShowTimePicker] = useState(false);
-
+  
   const [loading, setLoading] = useState(false);
 
-  const currentUser = whoAmI();
+ const {
+    data: buslistStudent,
+    error: buslistStudentError,
+    isLoading: buslistStudentIsLoading,
+    isValidating: buslistStudentIsValidating,
+    mutate: buslistStudentMutate
+ } = useBuslistStudent(session ?? '', buslistStudentId)
+
+
+ function parseTimeToTodayDate(timeString: string): Date | undefined {
+    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+    if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) return undefined;
+  
+    const today = new Date();
+    today.setHours(hours, minutes, seconds, 0);
+    return today;
+  }
+
+ useEffect(() => {
+    if (buslistStudent) {
+        const endClassTime = buslistStudent.end_class_time;
+    
+        // Tenta criar a data a partir do formato recebido
+        const parsedEndTime = endClassTime
+          ? parseTimeToTodayDate(endClassTime) // Conversão para incluir a data atual
+          : undefined;
+    
+        setEndTime(parsedEndTime); // Atualiza o estado com o valor convertido
+        setIsReturn(buslistStudent.is_return);
+      }
+    
+ },[buslistStudent])
 
   const formattedTime = endTime
     ? endTime.toLocaleTimeString('pt-BR', {
@@ -40,40 +76,41 @@ export default function ModalAddBuslist({
       })
     : '00:00:00';
 
-  const handleSave = async () => {
-    setLoading(true);
-    try {
-      const data = {
-        end_class_time: formattedTime,
-        is_return: isReturn,
+
+    const handleSave = async () => {
+        setLoading(true);
+        try {
+          const data = {
+            end_class_time: formattedTime,
+            is_return: isReturn,
+          };
+          const response = await updateBuslistStudent(
+            session ?? '',
+            buslistStudentId,
+            data,
+          );
+    
+          if (response) {
+            Toast.show({
+              type: 'success',
+              text1: 'Sucesso',
+              text2: 'Informaçoes atualizadas',
+            });
+          }
+    
+          mutate();
+        } catch (error) {
+          Toast.show({
+            type: 'error',
+            text1: 'Erro',
+            text2: 'Erro ao atualizar informações',
+          });
+        } finally {
+          setLoading(false);
+          setModalVisible(false);
+        }
       };
-      const response = await createBuslistStudent(
-        session ?? '',
-        data,
-        currentUser?.id ?? '',
-        buslistId ?? ''
-      );
 
-      if (response) {
-        Toast.show({
-          type: 'success',
-          text1: 'Sucesso',
-          text2: 'Adicionado na lista',
-        });
-      }
-
-      mutate();
-    } catch (error) {
-      Toast.show({
-        type: 'error',
-        text1: 'Erro',
-        text2: 'Erro ao adicionar na lista',
-      });
-    } finally {
-      setLoading(false);
-      setModalVisible(false);
-    }
-  };
 
   const handleTimeChange = (event: any, selectedDate?: Date) => {
     setShowTimePicker(Platform.OS === 'ios');
@@ -144,9 +181,9 @@ export default function ModalAddBuslist({
             ) : (
               <Button
                 title="Salvar"
-                onPress={handleSave}
                 color="#007bff"
                 width="40%"
+                onPress={handleSave}
               />
             )}
           </View>
