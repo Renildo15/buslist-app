@@ -1,4 +1,3 @@
-import { useBuslist } from '@/api/api';
 import DefaultLayout from '@/components/defaul-layout';
 import { useLocalSearchParams } from 'expo-router';
 import StudentsList from '@/components/home/buslist/students-list';

@@ -5,7 +5,7 @@ import { TextInput, TextInputProps } from 'react-native';
 interface SearchBarProps extends TextInputProps {
   value: string;
   onChangeText: (text: string) => void;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 export default function SearchBar({
@@ -15,7 +15,7 @@ export default function SearchBar({
   ...props
 }: SearchBarProps) {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomWidth:1, borderColor: '#007bff' }}>
       <TextInput
         placeholder="Pesquisar"
         value={value}

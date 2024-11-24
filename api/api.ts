@@ -331,11 +331,17 @@ export function useBuslistToday(token: string | null, date: string) {
   };
 }
 
-export function useBuslist(token: string | null, buslistID: string) {
-  const url = `${apiUri}/api/buslists/students/${buslistID}/`;
+export function useStudents(token: string | null, buslistID: string, search?: string, filter?: SVGStringList) {
+  let url = `${apiUri}/api/buslists/students/${buslistID}/`;
+
+  if (search) {
+    url +=
+      filter !== null && filter !== undefined
+        ? `&search=${encodeURIComponent(search)}`
+        : `?search=${encodeURIComponent(search)}`;
+  }
 
   interface IResponse {
-    buslist: IBusListWithoutStudents;
     students: IBusListStudent[];
   }
 
@@ -572,4 +578,21 @@ export async function updateBuslistStudent(token: string, buslistStudentID: stri
     }
     throw error;
   }
+}
+
+export function useBuslist(token: string | null, buslistID: string) {
+  const url = `${apiUri}/api/buslists/${buslistID}/detail/`;
+
+  const { data, error, isLoading, isValidating, mutate } = useSWR<IBusListWithoutStudents>(
+    [url],
+    () => fetcher(url, token)
+  );
+
+  return {
+    data,
+    error,
+    isLoading,
+    isValidating,
+    mutate,
+  };
 }

@@ -6,13 +6,14 @@ import {
   ThemeProvider,
 } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
-import { Slot, Stack } from 'expo-router';
+import { Slot } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SessionProvider } from '@/context/AuthContext';
 import Toast from 'react-native-toast-message';
 import { useColorScheme } from '@/components/useColorScheme';
+import { StatusBar } from 'expo-status-bar';
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -45,6 +46,7 @@ function RootLayoutNav() {
     <SessionProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <SafeAreaView style={{ flex: 1 }}>
+          <StatusBar backgroundColor='#007bff'/>
           <Slot />
           <Toast />
         </SafeAreaView>
