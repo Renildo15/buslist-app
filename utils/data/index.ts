@@ -1,3 +1,3 @@
-import { optionsFilters, Notice, NoticeType } from './options-filter';
+import { optionsFilters, Option, OptionType } from './options-filter';
 
-export { optionsFilters, Notice, NoticeType };
+export { optionsFilters, Option, OptionType };

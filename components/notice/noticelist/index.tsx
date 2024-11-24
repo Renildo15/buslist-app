@@ -17,17 +17,16 @@ import { JSX, useCallback, useMemo, useRef, useState } from 'react';
 import NoticeSkeleton from '../skeleton';
 import ButtonIcon from '@/components/button-icon';
 import {
-  GestureHandlerRootView,
-  TextInput,
-} from 'react-native-gesture-handler';
+  GestureHandlerRootView} from 'react-native-gesture-handler';
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetSectionList,
 } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
 import { RadioButton } from 'react-native-paper';
-import { NoticeType, optionsFilters } from '@/utils/data';
+import { OptionType, optionsFilters } from '@/utils/data';
 import SearchBar from '../searchbar';
+import Sheet from '@/components/sheet';
 
 export default function NoticeList() {
   const { session } = useSession();
@@ -41,7 +40,6 @@ export default function NoticeList() {
   const animationValue = useRef(new Animated.Value(0)).current;
 
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
 
   const toggleSearchBar = () => {
     if (searchVisible) {
@@ -87,27 +85,7 @@ export default function NoticeList() {
     setRefreshing(false);
   };
 
-  const renderBackdrop = useCallback(
-    (props: JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={1}
-        appearsOnIndex={2}
-      />
-    ),
-    []
-  );
-
-  const renderSectionHeader = useCallback(
-    ({ section }: { section: SectionListData<NoticeType> }) => (
-      <View style={styles.sectionHeaderContainer}>
-        <Text style={styles.section_title}>{section.title}</Text>
-      </View>
-    ),
-    []
-  );
-
-  const renderItem: ListRenderItem<NoticeType> = useCallback(
+  const renderItem: ListRenderItem<OptionType> = useCallback(
     ({ item }) => (
       <View style={styles.itemContainer}>
         <RadioButton
@@ -130,7 +108,12 @@ export default function NoticeList() {
   const isLoadingOrValidating = loadingNotices || validatingNotices;
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <Sheet
+      bottomSheetRef={bottomSheetRef}
+      list={optionsFilters}
+      onSheetChange={handleSheetChanges}
+      renderItem={renderItem}
+    >
       <View style={styles.header_list}>
         <Text style={styles.header_text}>Avisos</Text>
         {searchVisible ? (
@@ -179,26 +162,6 @@ export default function NoticeList() {
           }
         />
       )}
-
-      <BottomSheet
-        ref={bottomSheetRef}
-        onChange={handleSheetChanges}
-        snapPoints={snapPoints}
-        enablePanDownToClose={true}
-        enableOverDrag={true}
-        handleIndicatorStyle={{ backgroundColor: '#007bff' }}
-        containerStyle={{ padding: 10 }}
-        index={-1}
-        backdropComponent={renderBackdrop}
-      >
-        <BottomSheetSectionList
-          sections={optionsFilters ?? []}
-          keyExtractor={(i) => i.id}
-          renderSectionHeader={renderSectionHeader}
-          renderItem={renderItem}
-          contentContainerStyle={styles.contentContainer}
-        />
-      </BottomSheet>
-    </GestureHandlerRootView>
+    </Sheet>
   );
 }
