@@ -7,6 +7,7 @@ import { useSession } from '@/context/AuthContext';
 import Error from '@/components/errors/error';
 import Empty from '@/components/empty';
 import { useState } from 'react';
+import BusListSkeleton from './buslist-skeleton';
 
 export function Buslist() {
   const { session } = useSession();
@@ -18,8 +19,12 @@ export function Buslist() {
   const {
     data: buslist,
     error: errorBuslist,
+    isLoading: isLoadingBuslist,
+    isValidating: isValidatingBuslist,
     mutate: mutateBusList,
   } = useBuslistToday(session ?? null, dateToday);
+
+  const isLoadingOrValidating = isLoadingBuslist || isValidatingBuslist;
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -27,34 +32,36 @@ export function Buslist() {
     setRefreshing(false);
   };
 
-  if (errorBuslist) {
-    return <Error message={errorBuslist.message} />;
-  }
-
   return (
     <View style={styles.container}>
       <View style={styles.header_list}>
         <Text style={styles.header_text}>Listas de Hoje</Text>
         <Text>{today}</Text>
       </View>
-      <FlatList
-        style={{ width: '100%' }}
-        contentContainerStyle={{ flex: 1 }}
-        data={buslist?.results ?? []}
-        renderItem={({ item }) => (
-          <CardBuslist buslist={item} mutate={mutateBusList} />
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        ListEmptyComponent={() => <Empty message="Nenhuma lista encontrada" />}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            colors={['#007bff']}
-          />
-        }
-      />
+      { errorBuslist ? (
+        <Error message={errorBuslist.message} />
+      ) : isLoadingOrValidating ? (
+        <BusListSkeleton />
+      ) : (
+        <FlatList
+          style={{ width: '100%' }}
+          contentContainerStyle={{ flex: 1 }}
+          data={buslist?.results ?? []}
+          renderItem={({ item }) => (
+            <CardBuslist buslist={item} mutate={mutateBusList} />
+          )}
+          keyExtractor={(item) => item.id.toString()}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          ListEmptyComponent={() => <Empty message="Nenhuma lista encontrada" />}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={['#007bff']}
+            />
+          }
+       />
+      )}
     </View>
   );
 }

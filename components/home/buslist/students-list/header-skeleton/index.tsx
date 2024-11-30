@@ -3,14 +3,9 @@ import { StyleSheet } from 'react-native';
 import React from 'react';
 
 
-export default function NoticeSkeleton() {
+export default function HeaderSkeleton() {
   return (
     <View style={styles.container}> 
-      <View style={styles.placeholder} /> 
-      <View style={styles.placeholder} /> 
-      <View style={styles.placeholder} />
-      <View style={styles.placeholder} /> 
-      <View style={styles.placeholder} /> 
       <View style={styles.placeholder} /> 
     </View> 
   );
@@ -24,8 +19,7 @@ const styles = StyleSheet.create({
   }, 
   placeholder: { 
     backgroundColor: '#ccc', 
-    height: 80, 
-    borderRadius: 4, 
+    height: 20, 
     marginBottom: 8, 
   }
 }); 

@@ -131,7 +131,7 @@ export default function NoticeList() {
           </View>
         )}
       </View>
-
+     
       {errorNotices ? (
         <Error message={errorNotices.message} />
       ) : isLoadingOrValidating ? (
@@ -144,7 +144,7 @@ export default function NoticeList() {
           renderItem={({ item }) => <CardNotice notice={item} />}
           keyExtractor={(item) => item.id.toString()}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
-          ListEmptyComponent={() => <Empty message="Nenhum aviso encontrada" />}
+          ListEmptyComponent={() => <Empty message="Nenhum aviso encontrado" />}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}

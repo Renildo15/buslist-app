@@ -1,4 +1,4 @@
-import { View } from '@/components/Themed';
+import { View, Text } from '@/components/Themed';
 import { useSession } from '@/context/AuthContext';
 import { useBuslist, useInstituitions, useStudents } from '@/api/api';
 import { styles } from './styles';
@@ -16,6 +16,10 @@ import Sheet from '@/components/sheet';
 import { optionsFilterStudent } from '@/utils/data/options-filter';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { IInstitution } from '@/api/interfaces/institution';
+import Error from '@/components/errors/error';
+import HeaderSkeleton from './header-skeleton';
+import StudentSkeleton from './students-skeleton';
+import InstitutionSkeleton from './institutions-skeleton';
 
 interface IStudentsListProps {
   buslistUuid: string;
@@ -43,19 +47,29 @@ export default function StudentsList({ buslistUuid }: IStudentsListProps) {
     data: students,
     error: errorStudents,
     isLoading: isLoadingStudents,
-    mutate: mutateBuslist,
+    isValidating: isValidatingStudents,
+    mutate: mutateStudents,
   } = useStudents(session ?? '', buslistUuid as string, searchText, selectedFilter, value);
 
   const {
-    data: instituitions
+    data: instituitions,
+    error: errorInstitutions,
+    isLoading: isLoadingInstitutions,
+    isValidating: isValidatingIntitutons,
+    mutate: mutateInstitutions
   } = useInstituitions(session ?? '');
+
   const {
     data: buslist,
     error: buslistError,
     isLoading: buslistIsLoading,
     isValidating: buslistIsValidating,
-    mutate: buslistMutate
+    mutate: mutateBuslist
   } = useBuslist(session ?? '', buslistUuid as string)
+
+  const isLoadingOrValidatingBuslist = buslistIsLoading || buslistIsValidating;
+  const isLoadingOrValidatingStudent = isLoadingStudents || isValidatingStudents;
+  const isLoadingOrValidatingInstitution = isLoadingInstitutions || isValidatingIntitutons;
 
   useEffect(() => {
     if (instituitions) {
@@ -78,7 +92,9 @@ export default function StudentsList({ buslistUuid }: IStudentsListProps) {
 
   const onRefresh = async () => {
     setRefreshing(true);
+    await mutateStudents();
     await mutateBuslist();
+    await mutateInstitutions();
     setRefreshing(false);
   };
 
@@ -108,28 +124,39 @@ export default function StudentsList({ buslistUuid }: IStudentsListProps) {
       renderItem={renderItem}
     >
       <View style={styles.container}>
-        <HeaderStudentsList
-          name={buslist?.name ?? 'Sem Nome'}
-          is_enable={buslist?.is_enable ?? true}
-          list_date={buslist?.list_date ?? 'Sem Data'}
-        />
-          <View style={styles.searchbar_content}>
-            <View style={{width: '90%'}}>
-              <SearchBar
-                  value={searchText}
-                  onChangeText={setSearchText}
-                  buttonIsVissible={false}
-              />
-            </View>
-            <ButtonIcon
-              name="filter"
-              size={24}
-              onPress={() => {
-                bottomSheetRef.current?.expand();
-              }}
+        { buslistError ? (
+          <Text style={{fontWeight: 'bold', fontSize: 20, color:'red'}}>Problemas no servidor</Text>
+        ) : isLoadingOrValidatingBuslist ? (
+          <HeaderSkeleton />
+        ) : (
+          <HeaderStudentsList
+            name={buslist?.name ?? 'Sem Nome'}
+            is_enable={buslist?.is_enable ?? true}
+            list_date={buslist?.list_date ?? 'Sem Data'}
+          />
+        )}
+        <View style={styles.searchbar_content}>
+          <View style={{width: '90%'}}>
+            <SearchBar
+                value={searchText}
+                onChangeText={setSearchText}
+                buttonIsVissible={false}
             />
-        
           </View>
+          <ButtonIcon
+            name="filter"
+            size={24}
+            onPress={() => {
+              bottomSheetRef.current?.expand();
+            }}
+          />
+      
+        </View>
+        { errorInstitutions ? (
+          <Text style={{fontWeight: 'bold', fontSize: 20, color:'red'}}>Problemas no servidor</Text>
+        ) : isLoadingOrValidatingInstitution ? (
+          <InstitutionSkeleton />
+        ) : (
           <View style={{width: '100%'}}>
             <DropDownPicker
               open={open}
@@ -171,7 +198,13 @@ export default function StudentsList({ buslistUuid }: IStudentsListProps) {
               }}
             />
           </View>
+        )}
         
+        { errorStudents ? (
+          <Error message={errorStudents.message} />
+        ) : isLoadingOrValidatingStudent ? (
+          <StudentSkeleton />
+        ) : (
           <FlatList
             data={students?.students}
             style={{ width: '100%' }}
@@ -185,18 +218,20 @@ export default function StudentsList({ buslistUuid }: IStudentsListProps) {
                 end_class_time={item.end_class_time}
                 is_return={item.is_return}
                 currentUserId={currentUser?.id ?? ""}
-                mutate={mutateBuslist}
+                mutate={mutateStudents}
               />
             )}
-            ListEmptyComponent={() => <Empty message="Nenhum aviso encontrada" />}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                colors={['#007bff']}
-              />
-            }
-          />
+          ListEmptyComponent={() => <Empty message="Nenhum aviso encontrada" />}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={['#007bff']}
+            />
+          }
+        />
+        )}
+        
       </View>
     </Sheet>
   );
