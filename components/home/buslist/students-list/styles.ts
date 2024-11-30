@@ -7,4 +7,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
+  searchbar_content: {
+    marginBottom: 8,
+    width: '100%', 
+    flexDirection:'row', 
+    alignItems:'center', 
+    justifyContent:'space-between', 
+    gap:8
+  }
 });

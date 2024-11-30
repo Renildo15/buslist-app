@@ -1,15 +1,15 @@
-export type NoticeType = {
+export type OptionType = {
   id: string;
   type: string;
   is_filtereded?: boolean | null;
 };
 
-export type Notice = {
+export type Option = {
   title: string;
-  data: NoticeType[];
+  data: OptionType[];
 };
 
-export const optionsFilters: Notice[] = [
+export const optionsFilters: Option[] = [
   {
     title: 'Filtrar avisos por: ',
     data: [
@@ -19,3 +19,14 @@ export const optionsFilters: Notice[] = [
     ],
   },
 ];
+
+export const optionsFilterStudent: Option[] = [
+  {
+    title:'Filtrar alunos por: ',
+    data: [
+      { id: '1', type: 'Todos', is_filtereded: null },
+      { id: '2', type: 'Volta', is_filtereded: true },
+      { id: '3', type: 'Não volta', is_filtereded: false },
+    ]
+  }
+]
