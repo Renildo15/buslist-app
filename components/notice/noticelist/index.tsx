@@ -5,7 +5,6 @@ import {
   FlatList,
   ListRenderItem,
   RefreshControl,
-  SectionListData,
 } from 'react-native';
 import { styles } from './styles';
 import { useSession } from '@/context/AuthContext';
@@ -13,20 +12,14 @@ import { useNotices } from '@/api/api';
 import Empty from '@/components/empty';
 import Error from '@/components/errors/error';
 import CardNotice from '../card-notice';
-import { JSX, useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import NoticeSkeleton from '../skeleton';
 import ButtonIcon from '@/components/button-icon';
-import {
-  GestureHandlerRootView} from 'react-native-gesture-handler';
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetSectionList,
-} from '@gorhom/bottom-sheet';
-import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
-import { RadioButton } from 'react-native-paper';
+import BottomSheet from '@gorhom/bottom-sheet';
 import { OptionType, optionsFilters } from '@/utils/data';
 import SearchBar from '../searchbar';
 import Sheet from '@/components/sheet';
+import RadioButtonComponent from '@/components/radio-button-component';
 
 export default function NoticeList() {
   const { session } = useSession();
@@ -85,21 +78,19 @@ export default function NoticeList() {
     setRefreshing(false);
   };
 
+  const handlePress = (itemId: string, isFiltered: boolean | null) => {
+    setSelectedId(itemId);
+    setSelectedFilter(isFiltered ?? null);
+    bottomSheetRef.current?.close();
+  };
+  
   const renderItem: ListRenderItem<OptionType> = useCallback(
     ({ item }) => (
-      <View style={styles.itemContainer}>
-        <RadioButton
-          value={item.id}
-          status={selectedId === item.id ? 'checked' : 'unchecked'}
-          onPress={() => {
-            setSelectedId(item.id);
-            setSelectedFilter(item.is_filtereded ?? null);
-          }}
-          uncheckedColor="white"
-          color="white"
-        />
-        <Text style={{ color: 'white' }}>{item.type}</Text>
-      </View>
+     <RadioButtonComponent
+      handleSelect={handlePress}
+      item={item}
+      status={selectedId === item.id ? 'checked' : 'unchecked'}
+     />
     ),
     [selectedId]
   );
@@ -124,6 +115,7 @@ export default function NoticeList() {
               value={searchText}
               onChangeText={setSearchText}
               onClose={toggleSearchBar}
+              buttonIsVissible={true}
             />
           </Animated.View>
         ) : (

@@ -28,9 +28,5 @@ export const optionsFilterStudent: Option[] = [
       { id: '2', type: 'Volta', is_filtereded: true },
       { id: '3', type: 'Não volta', is_filtereded: false },
     ]
-  },
-  {
-    title:'Filtrar alunos por: ',
-    data: []
   }
 ]

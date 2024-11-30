@@ -18,6 +18,7 @@ import {
 } from './interfaces/buslist';
 import { IBusStop } from './interfaces/busstop';
 import { INotice } from './interfaces/notice';
+import { IInstitution } from './interfaces/institution';
 
 async function fetcher(url: string, token?: string | null) {
   const res = await fetch(url, {
@@ -331,14 +332,23 @@ export function useBuslistToday(token: string | null, date: string) {
   };
 }
 
-export function useStudents(token: string | null, buslistID: string, search?: string, filter?: SVGStringList) {
+export function useStudents(token: string | null, buslistID: string, search?: string, filter?: boolean | null, institution?: string | null) {
   let url = `${apiUri}/api/buslists/students/${buslistID}/`;
+  if (filter !== null && filter !== undefined) {
+    url += `?return=${filter ? 'true' : 'false'}`;
+  }
+   // Adiciona o filtro de busca
+   if (search) {
+    url += url.includes('?')
+      ? `&search=${encodeURIComponent(search)}`
+      : `?search=${encodeURIComponent(search)}`;
+  }
 
-  if (search) {
-    url +=
-      filter !== null && filter !== undefined
-        ? `&search=${encodeURIComponent(search)}`
-        : `?search=${encodeURIComponent(search)}`;
+  // Adiciona o filtro de instituição
+  if (institution) {
+    url += url.includes('?')
+      ? `&institution=${encodeURIComponent(institution)}`
+      : `?institution=${encodeURIComponent(institution)}`;
   }
 
   interface IResponse {
@@ -584,6 +594,27 @@ export function useBuslist(token: string | null, buslistID: string) {
   const url = `${apiUri}/api/buslists/${buslistID}/detail/`;
 
   const { data, error, isLoading, isValidating, mutate } = useSWR<IBusListWithoutStudents>(
+    [url],
+    () => fetcher(url, token)
+  );
+
+  return {
+    data,
+    error,
+    isLoading,
+    isValidating,
+    mutate,
+  };
+}
+
+export function useInstituitions(token: string | null) {
+  const url = `${apiUri}/api/institutions/list/`;
+
+  interface IResponse {
+    institutions: IInstitution[];
+  }
+
+  const { data, error, isLoading, isValidating, mutate } = useSWR<IResponse>(
     [url],
     () => fetcher(url, token)
   );

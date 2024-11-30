@@ -6,12 +6,14 @@ interface SearchBarProps extends TextInputProps {
   value: string;
   onChangeText: (text: string) => void;
   onClose?: () => void;
+  buttonIsVissible: boolean
 }
 
 export default function SearchBar({
   value,
   onChangeText,
   onClose,
+  buttonIsVissible=true,
   ...props
 }: SearchBarProps) {
   return (
@@ -23,7 +25,9 @@ export default function SearchBar({
         style={{ flex: 1, paddingHorizontal: 8 }}
         {...props}
       />
-      <ButtonIcon name="x-square" onPress={onClose} size={24} />
+      { buttonIsVissible ? (
+        <ButtonIcon name="x-square" onPress={onClose} size={24} />
+      ): null}
     </View>
   );
 }

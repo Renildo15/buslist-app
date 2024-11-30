@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   card_container: {
     width: '100%',
-    paddingHorizontal: 16,
+    padding: 0,
   },
   card_content: {
     flexDirection: 'row',
