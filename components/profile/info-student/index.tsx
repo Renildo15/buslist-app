@@ -11,6 +11,7 @@ import { uploadAvatar, useWhoAmI } from '@/api/api';
 import Toast from 'react-native-toast-message';
 import TextInfo from './text-info';
 import ButtonAvatarSave from './button-avatar';
+import HeaderInfo from '@/components/header-info';
 
 export default function InfoStudent() {
   const { user, session } = useSession();
@@ -76,35 +77,12 @@ export default function InfoStudent() {
     <View style={styles.container}>
       <Text style={styles.header_text}>Informações sobre o estudante</Text>
       <View>
-        <View style={styles.avatar_container}>
-          <TouchableOpacity
-            style={styles.camera_icon}
-            onPress={handleSelectImage}
-          >
-            <Avatar
-              height={70}
-              width={70}
-              borderRadius={50}
-              uri={avatarUri ?? ''}
-            />
-            <Feather
-              name="camera"
-              size={20}
-              color="#007bff"
-              style={styles.camera_icon_position}
-            />
-          </TouchableOpacity>
-          <View style={styles.student_info_box}>
-            <Text>
-              {user?.first_name} {user?.last_name}
-            </Text>
-            <Text
-              style={{ fontSize: 12, fontWeight: 'semibold', color: 'gray' }}
-            >
-              {user?.profile.matric_number}
-            </Text>
-          </View>
-        </View>
+        <HeaderInfo 
+          user={user} 
+          avatarUri={avatarUri ?? ''} 
+          iconIsVisible={true}
+          handleSelectImage={handleSelectImage}
+        />
 
         <TextInfo label="Situação:" value={user?.profile.status ?? ''} />
         <TextInfo
