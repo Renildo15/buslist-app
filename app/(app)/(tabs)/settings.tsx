@@ -1,8 +1,8 @@
 import HeaderInfo from '@/components/header-info';
-import Avatar from '@/components/home/avatar';
+import OptionSettings from '@/components/settings/optionSettings';
 import { useSession } from '@/context/AuthContext';
 import { router } from 'expo-router';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 export default function TabSettings() {
   const { signOut, whoAmI } = useSession();
@@ -12,6 +12,30 @@ export default function TabSettings() {
     signOut();
     router.replace('/(auth)');
   };
+
+  const options = [
+    {
+      handle: () => {},
+      iconName: 'whatsapp',
+      text: 'Grupos do whatsapp',
+    },
+    {
+      handle: () => {},
+      iconName: 'book',
+      text: 'Temas',
+    },
+    {
+      handle: () => {},
+      iconName: 'bell',
+      text: 'Notificações',
+    },
+    {
+      handle: handleLogout,
+      iconName: 'sign-out',
+      text: 'Sair',
+    },
+  ]
+
   return (
     <View style={styles.container}>
       <View style={styles.header_content}>
@@ -22,9 +46,15 @@ export default function TabSettings() {
           iconIsVisible={false}
         />
       </View>
-      <TouchableOpacity onPress={handleLogout}>
-        <Text>Sair</Text>
-      </TouchableOpacity>
+       {/* TODO: Criar uma lista de opções de configurações */}
+      {options.map((option, index) => (
+        <OptionSettings 
+          key={index} 
+          handle={option.handle} 
+          iconName={option.iconName} 
+          text={option.text} 
+        />
+      ))}
     </View>
   );
 }
@@ -34,7 +64,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   header_content: {
     flexDirection:'column',
