@@ -36,14 +36,14 @@ export default function UpdateStudent() {
     if (currentUser) {
       setUsername(currentUser.username);
       setEmail(currentUser.email);
-      setWhatsapp(currentUser.profile.phone_number);
-      setStop(currentUser.profile.bus_stop);
+      setWhatsapp(currentUser.profile?.phone_number);
+      setStop(currentUser.profile?.bus_stop);
 
       setOriginalData({
         username: currentUser.username,
         email: currentUser.email,
-        phone_number: currentUser.profile.phone_number,
-        bus_stop: currentUser.profile.bus_stop,
+        phone_number: currentUser.profile?.phone_number,
+        bus_stop: currentUser.profile?.bus_stop,
       });
     }
   }, [whoAmI]);

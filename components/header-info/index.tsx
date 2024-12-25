@@ -45,7 +45,7 @@ export default function HeaderInfo({ user, handleSelectImage, avatarUri, iconIsV
             <Text
               style={{ fontSize: 12, fontWeight: 'semibold', color: 'gray' }}
             >
-              {user?.profile.matric_number}
+              {user?.profile?.matric_number}
             </Text>
           </View>
         </View>

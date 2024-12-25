@@ -18,7 +18,7 @@ export default function TabSettings() {
         <Text style={styles.header_text}>Configurações</Text>
         <HeaderInfo 
           user={currentUser} 
-          avatarUri={currentUser?.profile.avatar ?? ''} 
+          avatarUri={currentUser?.profile?.avatar ?? ''} 
           iconIsVisible={false}
         />
       </View>

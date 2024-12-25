@@ -1,10 +1,7 @@
-import Avatar from '@/components/home/avatar';
 import { View, Text } from '@/components/Themed';
 import { styles } from './styles';
 import { useSession } from '@/context/AuthContext';
 import { getTeachingLevel } from '@/utils';
-import { TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { uploadAvatar, useWhoAmI } from '@/api/api';
@@ -16,7 +13,7 @@ import HeaderInfo from '@/components/header-info';
 export default function InfoStudent() {
   const { user, session } = useSession();
   const [avatarUri, setAvatarUri] = useState<string | null>(
-    user?.profile.avatar ?? null
+    user?.profile?.avatar ?? null
   );
   const [showButtonAvatar, setShowButtonAvatar] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -84,18 +81,18 @@ export default function InfoStudent() {
           handleSelectImage={handleSelectImage}
         />
 
-        <TextInfo label="Situação:" value={user?.profile.status ?? ''} />
+        <TextInfo label="Situação:" value={user?.profile?.status ?? ''} />
         <TextInfo
           label="Curso:"
-          value={`${user?.profile.course_name} - ${getTeachingLevel(user?.profile.teaching_level)}`}
+          value={`${user?.profile?.course_name} - ${getTeachingLevel(user?.profile?.teaching_level)}`}
         />
         <TextInfo
           label="Instituição:"
-          value={user?.profile.institution ?? ''}
+          value={user?.profile?.institution ?? ''}
         />
         <TextInfo
           label="Parada:"
-          value={user?.profile.bus_stop ?? 'Sem parada'}
+          value={user?.profile?.bus_stop ?? 'Sem parada'}
         />
       </View>
       {showButtonAvatar && (
